@@ -33,34 +33,44 @@
         .header {
             background: linear-gradient(135deg, #4A90E2, #D81B60);
             color: white;
-            padding: 25px;
+            padding: 15px 25px;
             text-align: center;
             position: sticky;
             top: 0;
             z-index: 100;
             border-bottom: 2px solid rgba(255,255,255,0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header .logo {
+            width: 40px;
+            height: 40px;
+            background: url('logo-placeholder.png') no-repeat center/cover; /* Replace with your image */
+            margin-bottom: 5px;
         }
 
         .header h1 {
-            font-size: 30px;
+            font-size: 24px;
             font-weight: 800;
-            margin-bottom: 8px;
-            text-shadow: 0 3px 6px rgba(0,0,0,0.2);
+            margin: 0 0 2px;
+            display: block;
         }
 
-        .header p {
+        .header .user-info {
+            background: none;
+            margin: 0;
+            padding: 0;
+            display: block;
             font-size: 14px;
             opacity: 0.85;
             font-style: italic;
-        }
-
-        .user-info {
-            background: rgba(74,144,226,0.1);
-            margin: 15px 0;
-            padding: 12px;
-            border-radius: 12px;
-            display: none;
-            text-align: center;
+            max-width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .main-content {
@@ -391,10 +401,10 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
+            <div class="logo"></div>
             <h1>MOMTE</h1>
-            <p></p>
             <div class="user-info" id="userInfo">
-                <div id="userName">Guest User</div>
+                <span id="userName">Guest User</span>
             </div>
         </div>
 
