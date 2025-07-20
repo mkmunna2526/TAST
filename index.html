@@ -33,7 +33,7 @@
         .header {
             background: linear-gradient(135deg, #4A90E2, #D81B60);
             color: white;
-            padding: 15px 25px;
+            padding: 10px 25px; /* Reduced padding */
             text-align: center;
             position: sticky;
             top: 0;
@@ -43,19 +43,20 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            gap: 2px; /* Reduced gap between logo, title, and user info */
         }
 
         .header .logo {
-            width: 40px;
-            height: 40px;
+            width: 30px;
+            height: 30px; /* Reduced size */
             background: url('logo-placeholder.png') no-repeat center/cover; /* Replace with your image */
-            margin-bottom: 5px;
+            margin: 0;
         }
 
         .header h1 {
-            font-size: 24px;
+            font-size: 20px; /* Reduced font size */
             font-weight: 800;
-            margin: 0 0 2px;
+            margin: 0;
             display: block;
         }
 
@@ -64,7 +65,7 @@
             margin: 0;
             padding: 0;
             display: block;
-            font-size: 14px;
+            font-size: 12px; /* Reduced font size */
             opacity: 0.85;
             font-style: italic;
             max-width: 100%;
