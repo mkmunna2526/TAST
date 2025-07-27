@@ -3,175 +3,289 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TikTok Game</title>
+    <title>TikTok Gaming Hub</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
             font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            color: #fff;
-            overflow-x: hidden;
+            color: #333;
         }
-
+        
         .container {
             max-width: 400px;
             margin: 0 auto;
-            padding: 10px;
+            background: #fff;
             min-height: 100vh;
-            background: rgba(0,0,0,0.1);
-            backdrop-filter: blur(10px);
+            position: relative;
+            overflow-x: hidden;
         }
-
+        
         .header {
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            padding: 20px;
             text-align: center;
-            padding: 20px 0;
-            border-bottom: 2px solid rgba(255,255,255,0.2);
-            margin-bottom: 20px;
+            color: white;
+            position: relative;
         }
-
+        
         .header h1 {
-            font-size: 2.5em;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-size: 24px;
+            margin-bottom: 10px;
         }
-
+        
         .balance-display {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            background: rgba(255,255,255,0.1);
-            border-radius: 20px;
-            padding: 15px;
-            margin: 20px 0;
-            backdrop-filter: blur(5px);
+            background: rgba(255,255,255,0.2);
+            padding: 10px 15px;
+            border-radius: 25px;
+            margin-top: 10px;
         }
-
+        
         .coin-icon {
-            width: 30px;
-            height: 30px;
-            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            width: 24px;
+            height: 24px;
+            background: #ffd700;
             border-radius: 50%;
-            margin-right: 10px;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
             color: #333;
-            box-shadow: 0 4px 8px rgba(255,215,0,0.3);
+            margin-right: 8px;
         }
-
-        .balance-amount {
-            font-size: 1.5em;
-            font-weight: bold;
-        }
-
-        .content-area {
-            margin-bottom: 80px;
-        }
-
-        .game-section {
-            background: rgba(255,255,255,0.1);
-            border-radius: 15px;
+        
+        .content {
             padding: 20px;
-            margin: 20px 0;
-            backdrop-filter: blur(5px);
+            padding-bottom: 80px;
         }
-
+        
+        .section {
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        /* Game Section */
         .game-board {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 5px;
-            margin: 20px 0;
             max-width: 300px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .game-cell {
-            width: 80px;
-            height: 80px;
-            background: rgba(255,255,255,0.2);
-            border: none;
+            margin: 20px auto;
+            background: #333;
+            padding: 5px;
             border-radius: 10px;
-            font-size: 2em;
+        }
+        
+        .game-cell {
+            aspect-ratio: 1;
+            background: #fff;
+            border: none;
+            font-size: 36px;
             font-weight: bold;
-            color: #fff;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
+            border-radius: 5px;
         }
-
+        
         .game-cell:hover {
-            background: rgba(255,255,255,0.3);
-            transform: scale(1.05);
+            background: #f0f0f0;
         }
-
-        .game-cell:disabled {
-            cursor: not-allowed;
-            opacity: 0.6;
+        
+        .game-cell.x {
+            color: #ff6b6b;
         }
-
+        
+        .game-cell.o {
+            color: #4ecdc4;
+        }
+        
         .game-status {
             text-align: center;
-            font-size: 1.2em;
-            margin: 15px 0;
+            margin: 20px 0;
+            font-size: 18px;
             font-weight: bold;
         }
-
-        .shop-section {
-            background: rgba(255,255,255,0.1);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px 0;
-            backdrop-filter: blur(5px);
-        }
-
-        .coin-package {
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
-            padding: 15px;
-            margin: 10px 0;
-            text-align: center;
+        
+        .reset-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 12px 30px;
+            background: #4ecdc4;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
         }
-
-        .coin-package:hover {
-            background: rgba(255,255,255,0.2);
+        
+        .reset-btn:hover {
+            background: #45b7aa;
             transform: translateY(-2px);
         }
-
-        .tasks-section {
-            background: rgba(255,255,255,0.1);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px 0;
-            backdrop-filter: blur(5px);
+        
+        /* Shop Section */
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
         }
-
+        
+        .shop-item {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+        
+        .shop-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        .shop-item h3 {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .shop-item .price {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        /* Tasks Section */
+        .task-list {
+            margin-top: 20px;
+        }
+        
         .task-item {
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
+            background: #f8f9fa;
             padding: 15px;
-            margin: 10px 0;
+            margin-bottom: 10px;
+            border-radius: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-left: 4px solid #4ecdc4;
+        }
+        
+        .task-info h4 {
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        .task-info p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .task-btn {
+            padding: 8px 16px;
+            background: #4ecdc4;
+            color: white;
+            border: none;
+            border-radius: 20px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
         }
-
-        .task-item:hover {
+        
+        .task-btn:hover {
+            background: #45b7aa;
+        }
+        
+        /* Profile Section */
+        .profile-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 25px;
+            border-radius: 20px;
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
             background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
         }
-
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .stat-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            font-size: 24px;
+            color: #4ecdc4;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        /* Referral Section */
+        .referral-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+        
+        .referral-link {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            border: 2px dashed #4ecdc4;
+            margin: 10px 0;
+            word-break: break-all;
+            font-family: monospace;
+        }
+        
+        .copy-btn {
+            background: #4ecdc4;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        /* Bottom Navigation */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -179,203 +293,270 @@
             transform: translateX(-50%);
             width: 100%;
             max-width: 400px;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(10px);
+            background: white;
+            padding: 10px 0;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
             display: flex;
             justify-content: space-around;
-            padding: 10px 0;
-            border-top: 2px solid rgba(255,255,255,0.2);
+            z-index: 1000;
         }
-
+        
         .nav-item {
-            text-align: center;
-            color: #fff;
-            text-decoration: none;
-            padding: 10px;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-            flex: 1;
-        }
-
-        .nav-item.active {
-            background: rgba(255,255,255,0.2);
-        }
-
-        .nav-item:hover {
-            background: rgba(255,255,255,0.1);
-        }
-
-        .nav-icon {
-            font-size: 1.5em;
-            margin-bottom: 5px;
-        }
-
-        .section {
-            display: none;
-        }
-
-        .section.active {
-            display: block;
-        }
-
-        .btn {
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
+            padding: 5px;
+            transition: all 0.3s;
+            border-radius: 10px;
         }
-
-        .btn:hover {
+        
+        .nav-item.active {
+            background: #f0f8ff;
+            color: #4ecdc4;
+        }
+        
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+        
+        .nav-label {
+            font-size: 12px;
+        }
+        
+        /* Admin Panel */
+        .admin-login {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 50px 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .admin-login h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: bold;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #4ecdc4;
+            box-shadow: 0 0 10px rgba(78, 205, 196, 0.2);
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .login-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
-
-        .referral-section {
-            background: rgba(255,255,255,0.1);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px 0;
-            backdrop-filter: blur(5px);
-        }
-
-        .referral-link {
-            background: rgba(255,255,255,0.1);
-            padding: 10px;
-            border-radius: 10px;
-            word-break: break-all;
-            margin: 10px 0;
-        }
-
+        
+        /* Responsive Design */
         @media (max-width: 480px) {
-            .game-cell {
-                width: 70px;
-                height: 70px;
-                font-size: 1.5em;
+            .container {
+                max-width: 100%;
             }
+            
+            .game-board {
+                max-width: 250px;
+            }
+            
+            .shop-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section.active {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        /* Loading Spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Header -->
         <div class="header">
-            <h1 id="siteName">TikTok Game</h1>
+            <h1>🎮 TikTok Gaming Hub</h1>
             <div class="balance-display">
-                <div class="coin-icon">₹</div>
-                <div class="balance-amount" id="userBalance">0</div>
+                <div>
+                    <span class="coin-icon">₽</span>
+                    <span id="balance">0</span> Coins
+                </div>
+                <div>
+                    🏆 <span id="points">0</span> Points
+                </div>
             </div>
         </div>
 
-        <div class="content-area">
+        <!-- Main Content -->
+        <div class="content">
             <!-- Game Section -->
-            <div class="section active" id="gameSection">
-                <div class="game-section">
-                    <h2 style="text-align: center; margin-bottom: 20px;">🎮 Tic Tac Toe Game</h2>
-                    <div class="game-status" id="gameStatus">Your turn! Click any cell to start</div>
-                    <div class="game-board" id="gameBoard">
-                        <button class="game-cell" onclick="makeMove(0)"></button>
-                        <button class="game-cell" onclick="makeMove(1)"></button>
-                        <button class="game-cell" onclick="makeMove(2)"></button>
-                        <button class="game-cell" onclick="makeMove(3)"></button>
-                        <button class="game-cell" onclick="makeMove(4)"></button>
-                        <button class="game-cell" onclick="makeMove(5)"></button>
-                        <button class="game-cell" onclick="makeMove(6)"></button>
-                        <button class="game-cell" onclick="makeMove(7)"></button>
-                        <button class="game-cell" onclick="makeMove(8)"></button>
+            <div id="game-section" class="section active">
+                <div class="game-status" id="game-status">Your Turn - Click to Play!</div>
+                <div class="game-board" id="game-board">
+                    <button class="game-cell" data-index="0"></button>
+                    <button class="game-cell" data-index="1"></button>
+                    <button class="game-cell" data-index="2"></button>
+                    <button class="game-cell" data-index="3"></button>
+                    <button class="game-cell" data-index="4"></button>
+                    <button class="game-cell" data-index="5"></button>
+                    <button class="game-cell" data-index="6"></button>
+                    <button class="game-cell" data-index="7"></button>
+                    <button class="game-cell" data-index="8"></button>
+                </div>
+                <button class="reset-btn" onclick="resetGame()">🔄 New Game</button>
+            </div>
+
+            <!-- Shop Section -->
+            <div id="shop-section" class="section">
+                <h2>💰 Coin Shop</h2>
+                <div class="shop-grid">
+                    <button class="shop-item" onclick="purchaseCoins(100, 0.1)">
+                        <h3>💎 Starter Pack</h3>
+                        <p class="price">100 Coins<br>0.1 TON</p>
+                    </button>
+                    <button class="shop-item" onclick="purchaseCoins(500, 0.4)">
+                        <h3>🚀 Power Pack</h3>
+                        <p class="price">500 Coins<br>0.4 TON</p>
+                    </button>
+                    <button class="shop-item" onclick="purchaseCoins(1000, 0.7)">
+                        <h3>👑 Premium Pack</h3>
+                        <p class="price">1000 Coins<br>0.7 TON</p>
+                    </button>
+                    <button class="shop-item" onclick="purchaseCoins(2500, 1.5)">
+                        <h3>💫 Ultimate Pack</h3>
+                        <p class="price">2500 Coins<br>1.5 TON</p>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tasks Section -->
+            <div id="tasks-section" class="section">
+                <h2>📋 Daily Tasks</h2>
+                <div class="task-list">
+                    <div class="task-item">
+                        <div class="task-info">
+                            <h4>📺 Subscribe to YouTube</h4>
+                            <p>+100 Points</p>
+                        </div>
+                        <button class="task-btn" onclick="completeTask('youtube')">Complete</button>
                     </div>
-                    <div style="text-align: center;">
-                        <button class="btn" onclick="resetGame()">New Game</button>
+                    <div class="task-item">
+                        <div class="task-info">
+                            <h4>📱 Join Telegram Channel</h4>
+                            <p>+150 Points</p>
+                        </div>
+                        <button class="task-btn" onclick="completeTask('telegram')">Complete</button>
+                    </div>
+                    <div class="task-item">
+                        <div class="task-info">
+                            <h4>👥 Join Telegram Group</h4>
+                            <p>+200 Points</p>
+                        </div>
+                        <button class="task-btn" onclick="completeTask('telegram-group')">Complete</button>
+                    </div>
+                    <div class="task-item">
+                        <div class="task-info">
+                            <h4>🤖 Follow Bot Updates</h4>
+                            <p>+75 Points</p>
+                        </div>
+                        <button class="task-btn" onclick="completeTask('bot')">Complete</button>
                     </div>
                 </div>
             </div>
 
             <!-- Profile Section -->
-            <div class="section" id="profileSection">
-                <div class="game-section">
-                    <h2 style="text-align: center; margin-bottom: 20px;">👤 Profile</h2>
-                    <div style="text-align: center;">
-                        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; margin: 20px 0;">
-                            <h3 id="userName">@username</h3>
-                            <p>User ID: <span id="userId">123456</span></p>
-                            <p>Total Games: <span id="totalGames">0</span></p>
-                            <p>Games Won: <span id="gamesWon">0</span></p>
-                            <p>Current Balance: <span id="profileBalance">0</span> coins</p>
-                        </div>
-                        
-                        <div class="referral-section">
-                            <h3>🔗 Referral System</h3>
-                            <p>Your Referral Link:</p>
-                            <div class="referral-link" id="referralLink">
-                                https://example.com/ref/user123
-                            </div>
-                            <button class="btn" onclick="copyReferralLink()">Copy Link</button>
-                            <div style="margin-top: 20px;">
-                                <h4>Referrals: <span id="totalReferrals">0</span></h4>
-                            </div>
-                        </div>
-
-                        <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; margin: 20px 0;">
-                            <h4>📢 Admin Notification</h4>
-                            <p id="adminMessage">Welcome to TikTok Game! Enjoy playing and earn coins!</p>
-                        </div>
+            <div id="profile-section" class="section">
+                <div class="profile-card">
+                    <div class="profile-avatar">👤</div>
+                    <h3 id="username">Anonymous User</h3>
+                    <p>Member since today</p>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3 id="total-games">0</h3>
+                        <p>Games Played</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="games-won">0</h3>
+                        <p>Games Won</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="total-points">0</h3>
+                        <p>Total Points</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="total-coins">0</h3>
+                        <p>Total Coins</p>
                     </div>
                 </div>
-            </div>
 
-            <!-- Shop Section -->
-            <div class="section" id="shopSection">
-                <div class="shop-section">
-                    <h2 style="text-align: center; margin-bottom: 20px;">🛒 Coin Shop</h2>
-                    <div class="coin-package" onclick="buyCoinPackage(100, 0.1)">
-                        <h3>🪙 100 Coins</h3>
-                        <p>Price: 0.1 TON</p>
-                        <button class="btn">Buy Now</button>
+                <div class="referral-section">
+                    <h3>🔗 Referral Program</h3>
+                    <p>Share your link and earn 50 points for each friend!</p>
+                    <div class="referral-link" id="referral-link">
+                        https://tiktok-game.com/ref/USER123
                     </div>
-                    <div class="coin-package" onclick="buyCoinPackage(500, 0.4)">
-                        <h3>🪙 500 Coins</h3>
-                        <p>Price: 0.4 TON</p>
-                        <button class="btn">Buy Now</button>
-                    </div>
-                    <div class="coin-package" onclick="buyCoinPackage(1000, 0.7)">
-                        <h3>🪙 1000 Coins</h3>
-                        <p>Price: 0.7 TON</p>
-                        <button class="btn">Buy Now</button>
-                    </div>
-                    <div class="coin-package" onclick="buyCoinPackage(5000, 3.0)">
-                        <h3>🪙 5000 Coins</h3>
-                        <p>Price: 3.0 TON</p>
-                        <button class="btn">Buy Now</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tasks Section -->
-            <div class="section" id="tasksSection">
-                <div class="tasks-section">
-                    <h2 style="text-align: center; margin-bottom: 20px;">📋 Tasks</h2>
-                    <div class="task-item" onclick="completeTask('youtube', 100)">
-                        <div>
-                            <h3>📺 Subscribe YouTube Channel</h3>
-                            <p>Reward: 100 coins</p>
-                        </div>
-                        <button class="btn">Complete</button>
-                    </div>
-                    <div class="task-item" onclick="completeTask('telegram_follow', 150)">
-                        <div>
-                            <h3>📱 Follow Telegram Channel</h3>
-                            <p>Reward: 150 coins</p>
-                        </div>
-                        <button class="btn">Complete</button>
-                    </div>
-                    <div class="task-item" onclick="completeTask('telegram_group', 200)">
-                        <div>
-                            <h3>👥 Join Telegram Group</h3>
-                            <p>Reward: 200 coins</p>
-                        </div>
-                        <button class="btn">Complete</button>
+                    <button class="copy-btn" onclick="copyReferralLink()">📋 Copy Link</button>
+                    
+                    <div style="margin-top: 15px;">
+                        <h4>📊 Referral Stats</h4>
+                        <p>Total Referred: <span id="total-referrals">0</span></p>
+                        <p>Referral Points: <span id="referral-points">0</span></p>
                     </div>
                 </div>
             </div>
@@ -383,294 +564,483 @@
 
         <!-- Bottom Navigation -->
         <div class="bottom-nav">
-            <a href="#" class="nav-item active" onclick="showSection('gameSection')">
+            <div class="nav-item active" onclick="showSection('game')">
                 <div class="nav-icon">🎮</div>
-                <div>Game</div>
-            </a>
-            <a href="#" class="nav-item" onclick="showSection('profileSection')">
-                <div class="nav-icon">👤</div>
-                <div>Profile</div>
-            </a>
-            <a href="#" class="nav-item" onclick="showSection('shopSection')">
+                <div class="nav-label">Game</div>
+            </div>
+            <div class="nav-item" onclick="showSection('shop')">
                 <div class="nav-icon">🛒</div>
-                <div>Shop</div>
-            </a>
-            <a href="#" class="nav-item" onclick="showSection('tasksSection')">
+                <div class="nav-label">Shop</div>
+            </div>
+            <div class="nav-item" onclick="showSection('tasks')">
                 <div class="nav-icon">📋</div>
-                <div>Tasks</div>
-            </a>
+                <div class="nav-label">Tasks</div>
+            </div>
+            <div class="nav-item" onclick="showSection('profile')">
+                <div class="nav-icon">👤</div>
+                <div class="nav-label">Profile</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel Modal -->
+    <div id="admin-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000;">
+        <div class="admin-login">
+            <h2>🔐 Admin Login</h2>
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" id="admin-email" placeholder="Enter admin email">
+            </div>
+            <div class="form-group">
+                <label>Password:</label>
+                <input type="password" id="admin-password" placeholder="Enter admin password">
+            </div>
+            <button class="login-btn" onclick="adminLogin()">🚀 Login to Dashboard</button>
+            <button class="login-btn" style="background: #ff6b6b; margin-top: 10px;" onclick="closeAdminModal()">❌ Cancel</button>
         </div>
     </div>
 
     <script>
-        // Game state
-        let gameBoard = ['', '', '', '', '', '', '', '', ''];
-        let currentPlayer = 'X';
-        let gameActive = true;
-        let userBalance = 0;
-        let totalGames = 0;
-        let gamesWon = 0;
-        let clickedOnce = false;
+        // Game State
+        let gameState = {
+            board: ['', '', '', '', '', '', '', '', ''],
+            currentPlayer: 'X',
+            gameActive: true,
+            playerMoved: false
+        };
 
-        // TON Wallet Address
-        const TON_WALLET_ADDRESS = 'UQDpNcFB_W9VsD-loC8c1ShuE0xFEzjkwzKiF2fGBfkZ6FJJ';
+        // User Data
+        let userData = {
+            balance: 0,
+            points: 0,
+            gamesPlayed: 0,
+            gamesWon: 0,
+            totalReferrals: 0,
+            referralPoints: 0,
+            username: 'Anonymous User',
+            completedTasks: []
+        };
 
-        // Initialize game
+        // Load user data from localStorage simulation
+        function loadUserData() {
+            // In real implementation, this would connect to your database
+            const saved = localStorage.getItem('gameUserData');
+            if (saved) {
+                userData = {...userData, ...JSON.parse(saved)};
+                updateUI();
+            }
+        }
+
+        // Save user data
+        function saveUserData() {
+            localStorage.setItem('gameUserData', JSON.stringify(userData));
+            updateUI();
+        }
+
+        // Update UI elements
+        function updateUI() {
+            document.getElementById('balance').textContent = userData.balance;
+            document.getElementById('points').textContent = userData.points;
+            document.getElementById('username').textContent = userData.username;
+            document.getElementById('total-games').textContent = userData.gamesPlayed;
+            document.getElementById('games-won').textContent = userData.gamesWon;
+            document.getElementById('total-points').textContent = userData.points;
+            document.getElementById('total-coins').textContent = userData.balance;
+            document.getElementById('total-referrals').textContent = userData.totalReferrals;
+            document.getElementById('referral-points').textContent = userData.referralPoints;
+        }
+
+        // Game Logic
         function initGame() {
-            loadUserData();
-            updateDisplay();
-        }
-
-        // Navigation
-        function showSection(sectionId) {
-            // Hide all sections
-            document.querySelectorAll('.section').forEach(section => {
-                section.classList.remove('active');
+            const cells = document.querySelectorAll('.game-cell');
+            cells.forEach((cell, index) => {
+                cell.addEventListener('click', () => makeMove(index));
+                cell.textContent = '';
+                cell.classList.remove('x', 'o');
             });
             
-            // Remove active class from all nav items
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
+            gameState = {
+                board: ['', '', '', '', '', '', '', '', ''],
+                currentPlayer: 'X',
+                gameActive: true,
+                playerMoved: false
+            };
             
-            // Show selected section
-            document.getElementById(sectionId).classList.add('active');
-            
-            // Add active class to clicked nav item
-            event.target.closest('.nav-item').classList.add('active');
+            document.getElementById('game-status').textContent = 'Your Turn - Click to Play!';
         }
 
-        // Game logic
-        function makeMove(cellIndex) {
-            if (!gameActive || gameBoard[cellIndex] !== '' || clickedOnce) {
+        function makeMove(index) {
+            if (!gameState.gameActive || gameState.board[index] !== '' || gameState.playerMoved) {
                 return;
             }
 
-            clickedOnce = true;
-            gameBoard[cellIndex] = 'X';
-            document.querySelectorAll('.game-cell')[cellIndex].textContent = 'X';
-            document.querySelectorAll('.game-cell')[cellIndex].style.color = '#4ecdc4';
+            // Player move (X)
+            gameState.board[index] = 'X';
+            gameState.playerMoved = true;
+            updateCell(index, 'X');
 
             if (checkWinner()) {
-                document.getElementById('gameStatus').textContent = 'You Win! +500 coins';
-                userBalance += 500;
-                gamesWon++;
-                totalGames++;
-                gameActive = false;
-                updateDisplay();
-                saveUserData();
-                
-                setTimeout(() => {
-                    resetGame();
-                }, 1500);
                 return;
             }
 
-            if (gameBoard.every(cell => cell !== '')) {
-                document.getElementById('gameStatus').textContent = 'Draw! Try again';
-                totalGames++;
-                gameActive = false;
-                setTimeout(() => {
-                    resetGame();
-                }, 1500);
+            if (checkDraw()) {
                 return;
             }
 
-            // AI move (strategic to prevent user from winning)
+            // AI move after delay
             setTimeout(() => {
                 makeAIMove();
-                clickedOnce = false;
+                gameState.playerMoved = false;
             }, 500);
         }
 
         function makeAIMove() {
-            if (!gameActive) return;
+            if (!gameState.gameActive) return;
 
-            // AI strategy: Try to win, then block user, then random
-            let bestMove = findBestMove();
+            // Strategic AI that tries to prevent player from winning
+            let bestMove = getBestMove();
             
-            gameBoard[bestMove] = 'O';
-            document.querySelectorAll('.game-cell')[bestMove].textContent = 'O';
-            document.querySelectorAll('.game-cell')[bestMove].style.color = '#ff6b6b';
-
-            if (checkWinner()) {
-                document.getElementById('gameStatus').textContent = 'You Lose! Try again';
-                totalGames++;
-                gameActive = false;
-                setTimeout(() => {
-                    resetGame();
-                }, 1500);
-                return;
+            if (bestMove !== -1) {
+                gameState.board[bestMove] = 'O';
+                updateCell(bestMove, 'O');
+                
+                if (checkWinner()) {
+                    return;
+                }
+                
+                if (checkDraw()) {
+                    return;
+                }
+                
+                document.getElementById('game-status').textContent = 'Your Turn!';
             }
-
-            if (gameBoard.every(cell => cell !== '')) {
-                document.getElementById('gameStatus').textContent = 'Draw! Try again';
-                totalGames++;
-                gameActive = false;
-                setTimeout(() => {
-                    resetGame();
-                }, 1500);
-                return;
-            }
-
-            document.getElementById('gameStatus').textContent = 'Your turn!';
         }
 
-        function findBestMove() {
-            // Check if AI can win
+        function getBestMove() {
+            // First, check if AI can win
             for (let i = 0; i < 9; i++) {
-                if (gameBoard[i] === '') {
-                    gameBoard[i] = 'O';
-                    if (checkWinnerForPlayer('O')) {
-                        gameBoard[i] = '';
+                if (gameState.board[i] === '') {
+                    gameState.board[i] = 'O';
+                    if (isWinningMove('O')) {
+                        gameState.board[i] = '';
                         return i;
                     }
-                    gameBoard[i] = '';
+                    gameState.board[i] = '';
                 }
             }
 
-            // Check if need to block user
+            // Then, block player from winning
             for (let i = 0; i < 9; i++) {
-                if (gameBoard[i] === '') {
-                    gameBoard[i] = 'X';
-                    if (checkWinnerForPlayer('X')) {
-                        gameBoard[i] = '';
+                if (gameState.board[i] === '') {
+                    gameState.board[i] = 'X';
+                    if (isWinningMove('X')) {
+                        gameState.board[i] = '';
                         return i;
                     }
-                    gameBoard[i] = '';
+                    gameState.board[i] = '';
                 }
             }
 
-            // Strategic moves: center, corners, then edges
-            const strategicMoves = [4, 0, 2, 6, 8, 1, 3, 5, 7];
-            for (let move of strategicMoves) {
-                if (gameBoard[move] === '') {
-                    return move;
+            // Take center if available
+            if (gameState.board[4] === '') {
+                return 4;
+            }
+
+            // Take corners
+            const corners = [0, 2, 6, 8];
+            for (let corner of corners) {
+                if (gameState.board[corner] === '') {
+                    return corner;
                 }
             }
 
-            return 0;
+            // Take any available space
+            for (let i = 0; i < 9; i++) {
+                if (gameState.board[i] === '') {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        function isWinningMove(player) {
+            const winPatterns = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+                [0, 4, 8], [2, 4, 6] // Diagonals
+            ];
+
+            return winPatterns.some(pattern => 
+                pattern.every(index => gameState.board[index] === player)
+            );
+        }
+
+        function updateCell(index, player) {
+            const cell = document.querySelector(`[data-index="${index}"]`);
+            cell.textContent = player;
+            cell.classList.add(player.toLowerCase());
         }
 
         function checkWinner() {
-            const winPatterns = [
-                [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
-                [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
-                [0, 4, 8], [2, 4, 6] // diagonals
-            ];
+            if (isWinningMove('X')) {
+                gameState.gameActive = false;
+                document.getElementById('game-status').textContent = '🎉 You Won! +500 Points!';
+                userData.points += 500;
+                userData.gamesWon += 1;
+                userData.gamesPlayed += 1;
+                saveUserData();
+                setTimeout(resetGame, 1500);
+                return true;
+            }
 
-            return winPatterns.some(pattern => {
-                const [a, b, c] = pattern;
-                return gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c];
-            });
+            if (isWinningMove('O')) {
+                gameState.gameActive = false;
+                document.getElementById('game-status').textContent = '😔 AI Wins! Try Again!';
+                userData.gamesPlayed += 1;
+                saveUserData();
+                setTimeout(resetGame, 1500);
+                return true;
+            }
+
+            return false;
         }
 
-        function checkWinnerForPlayer(player) {
-            const winPatterns = [
-                [0, 1, 2], [3, 4, 5], [6, 7, 8],
-                [0, 3, 6], [1, 4, 7], [2, 5, 8],
-                [0, 4, 8], [2, 4, 6]
-            ];
-
-            return winPatterns.some(pattern => {
-                const [a, b, c] = pattern;
-                return gameBoard[a] === player && gameBoard[b] === player && gameBoard[c] === player;
-            });
+        function checkDraw() {
+            if (gameState.board.every(cell => cell !== '')) {
+                gameState.gameActive = false;
+                document.getElementById('game-status').textContent = '🤝 It\'s a Draw!';
+                userData.gamesPlayed += 1;
+                saveUserData();
+                setTimeout(resetGame, 1500);
+                return true;
+            }
+            return false;
         }
 
         function resetGame() {
-            gameBoard = ['', '', '', '', '', '', '', '', ''];
-            gameActive = true;
-            clickedOnce = false;
-            document.getElementById('gameStatus').textContent = 'Your turn! Click any cell to start';
-            
-            document.querySelectorAll('.game-cell').forEach(cell => {
-                cell.textContent = '';
-                cell.style.color = '#fff';
-            });
+            initGame();
         }
 
-        // Shop functions
-        function buyCoinPackage(coins, tonAmount) {
-            const confirmed = confirm(`Buy ${coins} coins for ${tonAmount} TON?`);
-            if (confirmed) {
-                // Redirect to TON wallet for payment
-                const tonUrl = `ton://transfer/${TON_WALLET_ADDRESS}?amount=${tonAmount * 1000000000}&text=BuyCoins_${coins}_${Date.now()}`;
-                window.open(tonUrl, '_blank');
+        // Navigation
+        function showSection(section) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+            // Show selected section
+            document.getElementById(section + '-section').classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Shop Functions
+        function purchaseCoins(amount, tonAmount) {
+            const confirmation = confirm(`Purchase ${amount} coins for ${tonAmount} TON?`);
+            if (confirmation) {
+                // Redirect to TON payment
+                const tonAddress = 'UQDpNcFB_W9VsD-loC8c1ShuE0xFEzjkwzKiF2fGBfkZ6FJJ';
+                const paymentUrl = `https://ton.org/payment?to=${tonAddress}&amount=${tonAmount}&comment=coins_${amount}`;
                 
                 // In real implementation, you would verify payment before adding coins
-                alert('Payment initiated! Coins will be added after payment confirmation.');
+                alert(`Redirecting to TON payment... After successful payment, ${amount} coins will be added to your account.`);
+                
+                // Simulate successful payment (remove in production)
+                setTimeout(() => {
+                    userData.balance += amount;
+                    saveUserData();
+                    alert(`✅ Payment successful! ${amount} coins added to your account.`);
+                }, 2000);
             }
         }
 
-        // Task functions
-        function completeTask(taskType, reward) {
+        // Task Functions
+        function completeTask(taskType) {
+            if (userData.completedTasks.includes(taskType)) {
+                alert('Task already completed!');
+                return;
+            }
+
+            let points = 0;
             let url = '';
-            
+
             switch(taskType) {
                 case 'youtube':
+                    points = 100;
                     url = 'https://youtube.com/@yourchannel';
                     break;
-                case 'telegram_follow':
+                case 'telegram':
+                    points = 150;
                     url = 'https://t.me/yourchannel';
                     break;
-                case 'telegram_group':
+                case 'telegram-group':
+                    points = 200;
                     url = 'https://t.me/yourgroup';
                     break;
+                case 'bot':
+                    points = 75;
+                    url = 'https://t.me/yourbot';
+                    break;
             }
-            
-            if (url) {
-                window.open(url, '_blank');
-                
-                setTimeout(() => {
-                    const completed = confirm('Have you completed this task?');
-                    if (completed) {
-                        userBalance += reward;
-                        updateDisplay();
-                        saveUserData();
-                        alert(`Task completed! +${reward} coins added to your balance.`);
-                    }
-                }, 3000);
-            }
+
+            // Open the social media link
+            window.open(url, '_blank');
+
+            // Add points and mark task as completed
+            setTimeout(() => {
+                const completed = confirm('Did you complete the task? Click OK to receive your points.');
+                if (completed) {
+                    userData.points += points;
+                    userData.completedTasks.push(taskType);
+                    saveUserData();
+                    alert(`✅ Task completed! +${points} points earned!`);
+                    
+                    // Update task button
+                    event.currentTarget.textContent = '✅ Completed';
+                    event.currentTarget.disabled = true;
+                    event.currentTarget.style.background = '#28a745';
+                }
+            }, 3000);
         }
 
-        // Referral functions
+        // Referral Functions
         function copyReferralLink() {
-            const referralLink = document.getElementById('referralLink').textContent;
-            navigator.clipboard.writeText(referralLink).then(() => {
-                alert('Referral link copied to clipboard!');
+            const link = document.getElementById('referral-link').textContent;
+            navigator.clipboard.writeText(link).then(() => {
+                alert('📋 Referral link copied to clipboard!');
             });
         }
 
-        // Data management
-        function loadUserData() {
-            const savedData = localStorage.getItem('tiktokGameData');
-            if (savedData) {
-                const data = JSON.parse(savedData);
-                userBalance = data.balance || 0;
-                totalGames = data.totalGames || 0;
-                gamesWon = data.gamesWon || 0;
+        // Admin Functions
+        function openAdminPanel() {
+            document.getElementById('admin-modal').style.display = 'block';
+        }
+
+        function closeAdminModal() {
+            document.getElementById('admin-modal').style.display = 'none';
+        }
+
+        function adminLogin() {
+            const email = document.getElementById('admin-email').value;
+            const password = document.getElementById('admin-password').value;
+            
+            // Check credentials
+            if (email === 'mkmunna2580@gmail.com' && password === 'mkMunna@haKear$xcmbn%njxdf') {
+                alert('✅ Admin login successful! Redirecting to admin panel...');
+                // Redirect to admin panel
+                window.open('https://ashraful.munnacodsit.xyz/app/admin.php', '_blank');
+                closeAdminModal();
+            } else {
+                alert('❌ Invalid credentials! Access denied.');
             }
         }
 
-        function saveUserData() {
-            const data = {
-                balance: userBalance,
-                totalGames: totalGames,
-                gamesWon: gamesWon
+        // Telegram Integration (Simulated)
+        function initTelegramUser() {
+            // In real implementation, this would connect to Telegram API
+            // For now, we'll simulate getting user data
+            if (window.Telegram && window.Telegram.WebApp) {
+                const tgUser = window.Telegram.WebApp.initDataUnsafe.user;
+                if (tgUser) {
+                    userData.username = tgUser.first_name + ' ' + (tgUser.last_name || '');
+                    userData.telegramId = tgUser.id;
+                    saveUserData();
+                    
+                    // Send user data to backend
+                    sendUserDataToBackend(tgUser);
+                }
+            }
+        }
+
+        function sendUserDataToBackend(telegramUser) {
+            // In real implementation, send to your backend
+            const userInfo = {
+                telegram_id: telegramUser.id,
+                username: telegramUser.username,
+                first_name: telegramUser.first_name,
+                last_name: telegramUser.last_name,
+                balance: userData.balance,
+                points: userData.points
             };
-            localStorage.setItem('tiktokGameData', JSON.stringify(data));
+            
+            // Simulate API call
+            console.log('Sending user data to backend:', userInfo);
+            
+            // You would use fetch() to send to your PHP backend
+            /*
+            fetch('https://ashraful.munnacodsit.xyz/app/api/update_user.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userInfo)
+            });
+            */
         }
 
-        function updateDisplay() {
-            document.getElementById('userBalance').textContent = userBalance;
-            document.getElementById('profileBalance').textContent = userBalance;
-            document.getElementById('totalGames').textContent = totalGames;
-            document.getElementById('gamesWon').textContent = gamesWon;
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initGame();
+            loadUserData();
+            initTelegramUser();
+            
+            // Check for admin access (hidden feature)
+            let adminClicks = 0;
+            document.querySelector('.header h1').addEventListener('click', function() {
+                adminClicks++;
+                if (adminClicks >= 5) {
+                    openAdminPanel();
+                    adminClicks = 0;
+                }
+            });
+            
+            // Auto-save user data every 30 seconds
+            setInterval(saveUserData, 30000);
+        });
+
+        // Removed service worker registration to fix 404 error
+
+        // Payment verification function
+        function verifyTonPayment(transactionId, amount) {
+            // In real implementation, verify payment on blockchain
+            return fetch('https://ashraful.munnacodsit.xyz/app/api/verify_payment.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    transaction_id: transactionId,
+                    expected_amount: amount,
+                    user_id: userData.telegramId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.verified) {
+                    userData.balance += data.coins;
+                    saveUserData();
+                    return true;
+                }
+                return false;
+            });
         }
 
-        // Initialize when page loads
-        window.addEventListener('load', initGame);
+        // Error handling
+        window.addEventListener('error', function(e) {
+            console.error('Application error:', e.error);
+            // In production, send error reports to your backend
+        });
+
+        // Prevent double-click exploitation
+        let lastClickTime = 0;
+        document.addEventListener('click', function(e) {
+            const currentTime = Date.now();
+            if (currentTime - lastClickTime < 300) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+            lastClickTime = currentTime;
+        });
     </script>
 </body>
 </html>
