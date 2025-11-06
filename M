@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diamond Quest</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding-bottom: 70px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .diamonds-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+            gap: 10px;
+        }
+
+        .diamond-icon {
+            font-size: 40px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Game Board */
+        .game-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .game-status {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .cell {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border: none;
+            border-radius: 15px;
+            font-size: 48px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .cell:hover:not(:disabled) {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+
+        .cell:disabled {
+            cursor: not-allowed;
+        }
+
+        .cell.x {
+            color: #667eea;
+        }
+
+        .cell.o {
+            color: #764ba2;
+        }
+
+        .new-game-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .new-game-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Floating Diamond */
+        .floating-diamond {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 100px;
+            cursor: pointer;
+            animation: float 2s ease-in-out infinite;
+            z-index: 1000;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+            display: none;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(-50%, -50%) translateY(0px); }
+            50% { transform: translate(-50%, -50%) translateY(-20px); }
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            color: #666;
+            text-decoration: none;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item.active {
+            color: #667eea;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+        }
+
+        /* Pages */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Tasks Page */
+        .tasks-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .task-item {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-info h3 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .task-info p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .task-reward {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        /* Profile Page */
+        .profile-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            margin: 0 auto 15px;
+            color: white;
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .play-timer {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading" id="loading">Loading Game...</div>
+    <div id="gameApp" style="display: none;">
+        <div class="floating-diamond" id="floatingDiamond">💎</div>
+
+        <!-- Home Page -->
+        <div class="page active" id="homePage">
+            <div class="container">
+                <div class="header">
+                    <div class="diamonds-display">
+                        <span class="diamond-icon">💎</span>
+                        <span id="diamondCount">0</span>
+                    </div>
+                </div>
+
+                <div class="play-timer" id="playTimer">
+                    Play Time: 0:00
+                </div>
+
+                <div class="game-container">
+                    <div class="game-status" id="gameStatus">Your Turn (X)</div>
+                    <div class="board" id="board">
+                        <button class="cell" data-index="0"></button>
+                        <button class="cell" data-index="1"></button>
+                        <button class="cell" data-index="2"></button>
+                        <button class="cell" data-index="3"></button>
+                        <button class="cell" data-index="4"></button>
+                        <button class="cell" data-index="5"></button>
+                        <button class="cell" data-index="6"></button>
+                        <button class="cell" data-index="7"></button>
+                        <button class="cell" data-index="8"></button>
+                    </div>
+                    <button class="new-game-btn" id="newGameBtn">New Game</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tasks Page -->
+        <div class="page" id="tasksPage">
+            <div class="container">
+                <div class="header">
+                    <h2 style="text-align: center; color: #667eea;">Tasks</h2>
+                </div>
+                
+                <!-- Add New Task Form -->
+                <div class="tasks-container" style="margin-bottom: 20px;">
+                    <h3 style="color: #333; margin-bottom: 15px;">Add New Task</h3>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <input type="text" id="taskTitle" placeholder="Task Title (e.g., Join Telegram Channel)" 
+                               style="padding: 12px; border: 2px solid #667eea; border-radius: 10px; font-size: 14px;">
+                        <input type="text" id="taskDescription" placeholder="Task Description" 
+                               style="padding: 12px; border: 2px solid #667eea; border-radius: 10px; font-size: 14px;">
+                        <input type="url" id="taskLink" placeholder="Link (YouTube, Telegram, etc.)" 
+                               style="padding: 12px; border: 2px solid #667eea; border-radius: 10px; font-size: 14px;">
+                        <input type="number" id="taskReward" placeholder="Diamond Reward" min="1" value="5"
+                               style="padding: 12px; border: 2px solid #667eea; border-radius: 10px; font-size: 14px;">
+                        <button id="addTaskBtn" style="padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer;">
+                            Add Task
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tasks List -->
+                <div class="tasks-container">
+                    <h3 style="color: #333; margin-bottom: 15px;">Available Tasks</h3>
+                    <div id="tasksList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Page -->
+        <div class="page" id="profilePage">
+            <div class="container">
+                <div class="profile-container">
+                    <div class="profile-header">
+                        <div class="profile-avatar">👤</div>
+                        <h2 id="username">@username</h2>
+                    </div>
+                    <div class="profile-stats">
+                        <div class="stat-card">
+                            <div class="stat-value" id="totalGames">0</div>
+                            <div class="stat-label">Games Played</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="totalWins">0</div>
+                            <div class="stat-label">Wins</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="totalDiamonds">0</div>
+                            <div class="stat-label">Total Diamonds</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="totalPlayTime">0m</div>
+                            <div class="stat-label">Play Time</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <a class="nav-item active" data-page="homePage">
+                <span class="nav-icon">🎮</span>
+                <span>Home</span>
+            </a>
+            <a class="nav-item" data-page="tasksPage">
+                <span class="nav-icon">📋</span>
+                <span>Tasks</span>
+            </a>
+            <a class="nav-item" data-page="profilePage">
+                <span class="nav-icon">👤</span>
+                <span>Profile</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
+    <!-- Ad Networks -->
+    <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
+    <script src='//libtl.com/sdk.js' data-zone='10144322' data-sdk='show_10144322'></script>
+    <script src="https://cdn.tgads.space/assets/js/adexium-widget.min.js"></script>
+    <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
+
+    <script>
+        // Wait for all scripts to load
+        window.addEventListener('load', function() {
+            initializeApp();
+        });
+
+        function initializeApp() {
+            // Firebase Configuration
+            const firebaseConfig = {
+                apiKey: "AIzaSyCP5C8hrLslTxx8mJbxL0TdzAB8JQKTgyo",
+                authDomain: "mojamx-34aa7.firebaseapp.com",
+                projectId: "mojamx-34aa7",
+                storageBucket: "mojamx-34aa7.firebasestorage.app",
+                messagingSenderId: "761766234617",
+                appId: "1:761766234617:web:488e84b00362389da29528",
+                measurementId: "G-D61CNJ5D49"
+            };
+
+            // Initialize Firebase
+            let db = null;
+            try {
+                if (typeof firebase !== 'undefined') {
+                    firebase.initializeApp(firebaseConfig);
+                    db = firebase.firestore();
+                    console.log('Firebase initialized successfully');
+                }
+            } catch (error) {
+                console.log('Firebase initialization error:', error);
+            }
+
+            // Initialize Ad Networks
+            let adexiumWidget = null;
+            let adsgramController = null;
+            let currentAdNetwork = 0;
+            const adNetworks = ['monetag', 'adexium', 'adsgram'];
+
+            try {
+                if (typeof AdexiumWidget !== 'undefined') {
+                    adexiumWidget = new AdexiumWidget({
+                        wid: 'c4540e3b-2bd7-467e-b818-4998a8cf339d',
+                        adFormat: 'interstitial'
+                    });
+                    console.log('Adexium initialized');
+                }
+            } catch(e) { 
+                console.log('Adexium not loaded'); 
+            }
+
+            try {
+                if (window.Adsgram) {
+                    adsgramController = window.Adsgram.init({ blockId: "int-16935" });
+                    console.log('Adsgram initialized');
+                }
+            } catch(e) { 
+                console.log('Adsgram not loaded'); 
+            }
+
+            // Game State
+            const gameState = {
+                board: ['', '', '', '', '', '', '', '', ''],
+                currentPlayer: 'X',
+                gameActive: true,
+                diamonds: 0,
+                gamesPlayed: 0,
+                wins: 0,
+                playStartTime: Date.now(),
+                playTimeSeconds: 0,
+                playTimeInterval: null,
+                diamondTimerInterval: null,
+                userId: 'user_' + Math.random().toString(36).substr(2, 9)
+            };
+
+            // Initialize Telegram User
+            if (window.Telegram && window.Telegram.WebApp) {
+                const tg = window.Telegram.WebApp;
+                const user = tg.initDataUnsafe && tg.initDataUnsafe.user;
+                if (user) {
+                    gameState.userId = user.id.toString();
+                    document.getElementById('username').textContent = user.username ? '@' + user.username : user.first_name;
+                }
+            }
+
+            const winningConditions = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8],
+                [0, 3, 6], [1, 4, 7], [2, 5, 8],
+                [0, 4, 8], [2, 4, 6]
+            ];
+
+            function makeMove(index) {
+                if (gameState.board[index] !== '' || !gameState.gameActive || gameState.currentPlayer !== 'X') return;
+
+                gameState.board[index] = 'X';
+                updateBoard();
+                
+                if (checkWin('X')) {
+                    endGame('You Win! 🎉');
+                    gameState.diamonds++;
+                    gameState.wins++;
+                    updateDisplay();
+                    saveUserData();
+                    return;
+                }
+                
+                if (checkDraw()) {
+                    endGame('Draw! 🤝');
+                    return;
+                }
+
+                gameState.currentPlayer = 'O';
+                document.getElementById('gameStatus').textContent = 'AI Turn (O)';
+                
+                setTimeout(() => {
+                    aiMove();
+                }, 500);
+            }
+
+            function aiMove() {
+                let availableMoves = [];
+                for (let i = 0; i < 9; i++) {
+                    if (gameState.board[i] === '') availableMoves.push(i);
+                }
+
+                if (availableMoves.length === 0) return;
+
+                let move = availableMoves[Math.floor(Math.random() * availableMoves.length)];
+                gameState.board[move] = 'O';
+                updateBoard();
+
+                if (checkWin('O')) {
+                    endGame('AI Wins! 🤖');
+                    return;
+                }
+
+                if (checkDraw()) {
+                    endGame('Draw! 🤝');
+                    return;
+                }
+
+                gameState.currentPlayer = 'X';
+                document.getElementById('gameStatus').textContent = 'Your Turn (X)';
+            }
+
+            function checkWin(player) {
+                return winningConditions.some(condition => {
+                    return condition.every(index => gameState.board[index] === player);
+                });
+            }
+
+            function checkDraw() {
+                return gameState.board.every(cell => cell !== '');
+            }
+
+            function endGame(message) {
+                gameState.gameActive = false;
+                document.getElementById('gameStatus').textContent = message;
+                gameState.gamesPlayed++;
+                saveUserData();
+            }
+
+            function updateBoard() {
+                const cells = document.querySelectorAll('.cell');
+                cells.forEach((cell, index) => {
+                    cell.textContent = gameState.board[index];
+                    cell.className = 'cell';
+                    if (gameState.board[index] === 'X') cell.classList.add('x');
+                    if (gameState.board[index] === 'O') cell.classList.add('o');
+                    cell.disabled = gameState.board[index] !== '' || !gameState.gameActive;
+                });
+            }
+
+            function newGame() {
+                showAd();
+                gameState.board = ['', '', '', '', '', '', '', '', ''];
+                gameState.currentPlayer = 'X';
+                gameState.gameActive = true;
+                document.getElementById('gameStatus').textContent = 'Your Turn (X)';
+                updateBoard();
+            }
+
+            function showAd() {
+                const network = adNetworks[currentAdNetwork];
+                console.log('Showing ad from:', network);
+
+                try {
+                    if (network === 'monetag' && typeof show_10144322 === 'function') {
+                        show_10144322().then(() => {
+                            console.log('Monetag ad shown');
+                        }).catch(e => console.log('Monetag error:', e));
+                    } else if (network === 'adexium' && adexiumWidget) {
+                        adexiumWidget.show();
+                    } else if (network === 'adsgram' && adsgramController) {
+                        adsgramController.show().then(() => {
+                            console.log('Adsgram ad shown');
+                        }).catch(e => console.log('Adsgram error:', e));
+                    }
+                } catch (e) {
+                    console.log('Ad error:', e);
+                }
+
+                currentAdNetwork = (currentAdNetwork + 1) % adNetworks.length;
+            }
+
+            function updateDisplay() {
+                document.getElementById('diamondCount').textContent = gameState.diamonds;
+                document.getElementById('totalGames').textContent = gameState.gamesPlayed;
+                document.getElementById('totalWins').textContent = gameState.wins;
+                document.getElementById('totalDiamonds').textContent = gameState.diamonds;
+            }
+
+            function startPlayTimer() {
+                gameState.playTimeInterval = setInterval(() => {
+                    gameState.playTimeSeconds++;
+                    const minutes = Math.floor(gameState.playTimeSeconds / 60);
+                    const seconds = gameState.playTimeSeconds % 60;
+                    document.getElementById('playTimer').textContent = 
+                        `Play Time: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                    document.getElementById('totalPlayTime').textContent = minutes + 'm';
+                }, 1000);
+            }
+
+            function startDiamondTimer() {
+                gameState.diamondTimerInterval = setInterval(() => {
+                    const floatingDiamond = document.getElementById('floatingDiamond');
+                    floatingDiamond.style.display = 'block';
+                    setTimeout(() => {
+                        floatingDiamond.style.display = 'none';
+                    }, 5000);
+                }, 240000); // 4 minutes
+            }
+
+            function claimDiamond() {
+                const floatingDiamond = document.getElementById('floatingDiamond');
+                floatingDiamond.style.display = 'none';
+                showAllAds();
+            }
+
+            function showAllAds() {
+                setTimeout(() => {
+                    if (typeof show_10144322 === 'function') {
+                        show_10144322().catch(e => console.log(e));
+                    }
+                }, 500);
+
+                setTimeout(() => {
+                    if (adexiumWidget) adexiumWidget.show();
+                }, 2000);
+
+                setTimeout(() => {
+                    if (adsgramController) {
+                        adsgramController.show().then(() => {
+                            gameState.diamonds++;
+                            updateDisplay();
+                            saveUserData();
+                        }).catch(e => console.log(e));
+                    } else {
+                        gameState.diamonds++;
+                        updateDisplay();
+                        saveUserData();
+                    }
+                }, 4000);
+            }
+
+            function switchPage(pageId) {
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                
+                document.getElementById(pageId).classList.add('active');
+                event.currentTarget.classList.add('active');
+            }
+
+            async function saveUserData() {
+                if (!db) return;
+                
+                try {
+                    await db.collection('users').doc(gameState.userId).set({
+                        diamonds: gameState.diamonds,
+                        gamesPlayed: gameState.gamesPlayed,
+                        wins: gameState.wins,
+                        playTimeSeconds: gameState.playTimeSeconds,
+                        lastPlayed: firebase.firestore.FieldValue.serverTimestamp(),
+                        telegramUsername: document.getElementById('username').textContent
+                    }, { merge: true });
+                    console.log('Data saved successfully');
+                } catch (error) {
+                    console.error('Error saving data:', error);
+                }
+            }
+
+            async function loadUserData() {
+                if (!db) return;
+                
+                try {
+                    const doc = await db.collection('users').doc(gameState.userId).get();
+                    if (doc.exists) {
+                        const data = doc.data();
+                        gameState.diamonds = data.diamonds || 0;
+                        gameState.gamesPlayed = data.gamesPlayed || 0;
+                        gameState.wins = data.wins || 0;
+                        gameState.playTimeSeconds = data.playTimeSeconds || 0;
+                        updateDisplay();
+                        console.log('Data loaded successfully');
+                    }
+                } catch (error) {
+                    console.error('Error loading data:', error);
+                }
+            }
+
+            // Event Listeners
+            document.querySelectorAll('.cell').forEach(cell => {
+                cell.addEventListener('click', function() {
+                    makeMove(parseInt(this.getAttribute('data-index')));
+                });
+            });
+
+            document.getElementById('newGameBtn').addEventListener('click', newGame);
+
+            document.getElementById('floatingDiamond').addEventListener('click', claimDiamond);
+
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    switchPage(this.getAttribute('data-page'));
+                });
+            });
+
+            // Save data before leaving
+            window.addEventListener('beforeunload', () => {
+                saveUserData();
+            });
+
+            // Initialize game
+            loadUserData();
+            startPlayTimer();
+            startDiamondTimer();
+            updateDisplay();
+
+            // Hide loading, show game
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('gameApp').style.display = 'block';
+
+            console.log('Game initialized successfully!');
+        }
+    </script>
+</body>
+</html>
