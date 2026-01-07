@@ -850,7 +850,7 @@
                 <input type="number" id="auctionPriceInput" placeholder="Enter sold price (e.g., 150)" readonly>
                 <button onclick="incrementPrice()" class="btn-increment">💰 Increase Price</button>
                 <button onclick="setAuctionPrice()">Set Price</button>
-                <span style="color: white; font-size: 0.85em; margin-left: 10px;">💡 Ctrl+I = Increase | Ctrl+M = Decrease | Ctrl+J = Jump (Normal)</span>
+                <span style="color: white; font-size: 0.8em; margin-left: 10px;">💡 Ctrl+I = Increase | Ctrl+M = Decrease | Ctrl+P = Position</span>
             </div>
             <div class="bank-actions">
                 <button class="btn-reset-data" onclick="startSecondRound()" style="background: #f59e0b;">
@@ -957,8 +957,83 @@
             "Dumuria Vikings": 2500
         };
 
-        // Track if iconic players are already randomized
-        let iconicPlayersRandomized = false;
+        // Lottery system variables
+        let shuffledIndices = []; // Randomized order of indices
+        let currentDisplayIndex = 0; // Current position in the shuffled list (for counter)
+
+        function initializeLottery() {
+            // Get all players in current category
+            const currentPlayers = getCurrentCategoryPlayers();
+            
+            // Create position slots (1 to total players)
+            const totalPositions = currentPlayers.length;
+            const positionSlots = Array(totalPositions).fill(null);
+            
+            // First pass: Assign players with specific position ranges
+            currentPlayers.forEach((player, index) => {
+                if (player.positionRange) {
+                    const [minPos, maxPos] = player.positionRange;
+                    
+                    // Find available position within range
+                    let availablePositions = [];
+                    for (let pos = minPos - 1; pos < maxPos && pos < totalPositions; pos++) {
+                        if (positionSlots[pos] === null) {
+                            availablePositions.push(pos);
+                        }
+                    }
+                    
+                    if (availablePositions.length > 0) {
+                        // Randomly pick a position from available positions in range
+                        const randomPos = availablePositions[Math.floor(Math.random() * availablePositions.length)];
+                        positionSlots[randomPos] = index;
+                    }
+                }
+            });
+            
+            // Second pass: Fill remaining positions with unassigned players
+            const unassignedPlayers = [];
+            currentPlayers.forEach((player, index) => {
+                if (!positionSlots.includes(index)) {
+                    unassignedPlayers.push(index);
+                }
+            });
+            
+            // Shuffle unassigned players
+            for (let i = unassignedPlayers.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [unassignedPlayers[i], unassignedPlayers[j]] = [unassignedPlayers[j], unassignedPlayers[i]];
+            }
+            
+            // Fill empty slots with unassigned players
+            let unassignedIndex = 0;
+            for (let pos = 0; pos < totalPositions; pos++) {
+                if (positionSlots[pos] === null && unassignedIndex < unassignedPlayers.length) {
+                    positionSlots[pos] = unassignedPlayers[unassignedIndex];
+                    unassignedIndex++;
+                }
+            }
+            
+            shuffledIndices = positionSlots;
+            currentDisplayIndex = 0;
+        }
+
+        function goToSpecificPosition() {
+            const position = prompt('Enter player position (1-' + getCurrentCategoryPlayers().length + '):');
+            
+            if (!position) return;
+            
+            const num = parseInt(position);
+            const currentPlayers = getCurrentCategoryPlayers();
+            
+            if (isNaN(num) || num < 1 || num > currentPlayers.length) {
+                alert(`⚠️ Please enter a valid number between 1 and ${currentPlayers.length}!`);
+                return;
+            }
+            
+            currentDisplayIndex = num - 1;
+            currentPlayerIndex = shuffledIndices[currentDisplayIndex];
+            displayCurrentPlayer();
+        }
 
         function updateTeamBudgetDisplay() {
             const budgetBox = document.getElementById('teamBudgetBox');
@@ -993,26 +1068,6 @@
             updateTeamBudgetDisplay();
         }
 
-        function randomizeIconicPlayersOnce() {
-            if (iconicPlayersRandomized) {
-                return; // Already randomized, don't do it again
-            }
-            
-            const iconicPlayers = allPlayers.filter(p => p.category === 'ICONIC');
-            const otherPlayers = allPlayers.filter(p => p.category !== 'ICONIC');
-            
-            // Fisher-Yates shuffle algorithm
-            for (let i = iconicPlayers.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [iconicPlayers[i], iconicPlayers[j]] = [iconicPlayers[j], iconicPlayers[i]];
-            }
-            
-            allPlayers = [...iconicPlayers, ...otherPlayers];
-            iconicPlayersRandomized = true;
-            saveToStorage();
-            console.log('Iconic players randomized automatically');
-        }
-
         const teamWelcomeMessages = {
             "Dumuria Kings": `{playerName} warm welcome to our team.
 We believe your skills and experience will make this team even stronger.
@@ -1038,79 +1093,81 @@ Let's play together, win together.`
         };
 
         const defaultPlayers = [
-            // Iconic Players (10 players)
-            { name: "Rana Islam Rabby", category: "ICONIC", basePrice: "100", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/RanaIslamRabby.jpeg", auctionPrice: null, team: null },
-            { name: "Shiab Gazi", category: "ICONIC", basePrice: "100", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/ShiabGazi.jpeg", auctionPrice: null, team: null },
-            { name: "Md. Jihad", category: "ICONIC", basePrice: "100", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdJihad.jpeg", auctionPrice: null, team: null },
-            { name: "Sojib Sheikh", category: "ICONIC", basePrice: "100", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/SojibSheikh.jpeg", auctionPrice: null, team: null },
-            { name: "Dibbojeet Mondal", category: "ICONIC", basePrice: "100", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/DibbojeetMondal.jpeg", auctionPrice: null, team: null },
-            { name: "Hamza Mulla", category: "ICONIC", basePrice: "100", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/HamzaMulla.jpeg", auctionPrice: null, team: null },
-            { name: "Md. Mobarok Hossan Munna", category: "ICONIC", basePrice: "100", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdMobarokHossanMunna.jpeg", auctionPrice: null, team: null },
-            { name: "David Warner", category: "ICONIC", basePrice: "100", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/RanaIslamRabby.jpeg", auctionPrice: null, team: null },
-            { name: "Virat Kohli", category: "ICONIC", basePrice: "100", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/ShiabGazi.jpeg", auctionPrice: null, team: null },
-            { name: "Steve Smith", category: "ICONIC", basePrice: "100", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdJihad.jpeg", auctionPrice: null, team: null },
+            // Iconic Players (10 players) - with position ranges
+            { name: "Rana Islam Rabby", category: "ICONIC", basePrice: "100", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/RanaIslamRabby.jpeg", auctionPrice: null, team: null, positionRange: [1, 3] },
+            { name: "Shiab Gazi", category: "ICONIC", basePrice: "100", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/ShiabGazi.jpeg", auctionPrice: null, team: null, positionRange: [1, 3] },
+            { name: "Md. Jihad", category: "ICONIC", basePrice: "100", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdJihad.jpeg", auctionPrice: null, team: null, positionRange: [1, 3] },
+            { name: "Sojib Sheikh", category: "ICONIC", basePrice: "100", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/SojibSheikh.jpeg", auctionPrice: null, team: null, positionRange: [4, 6] },
+            { name: "Dibbojeet Mondal", category: "ICONIC", basePrice: "100", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/DibbojeetMondal.jpeg", auctionPrice: null, team: null, positionRange: [4, 6] },
+            { name: "Hamza Mulla", category: "ICONIC", basePrice: "100", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/HamzaMulla.jpeg", auctionPrice: null, team: null, positionRange: [4, 6] },
+            { name: "Md. Mobarok Hossan Munna", category: "ICONIC", basePrice: "100", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdMobarokHossanMunna.jpeg", auctionPrice: null, team: null, positionRange: [1, 10] },
+            { name: "David Warner", category: "ICONIC", basePrice: "100", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/RanaIslamRabby.jpeg", auctionPrice: null, team: null, positionRange: [7, 10] },
+            { name: "Virat Kohli", category: "ICONIC", basePrice: "100", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/ShiabGazi.jpeg", auctionPrice: null, team: null, positionRange: [7, 10] },
+            { name: "Steve Smith", category: "ICONIC", basePrice: "100", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdJihad.jpeg", auctionPrice: null, team: null, positionRange: [7, 10] },
 
-            // Normal Players (50 players)
-            { name: "Mitchell Starc", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/SojibSheikh.jpeg", auctionPrice: null, team: null },
-            { name: "Glenn Maxwell", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/DibbojeetMondal.jpeg", auctionPrice: null, team: null },
-            { name: "Trent Boult", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/HamzaMulla.jpeg", auctionPrice: null, team: null },
-            { name: "Marcus Stoinis", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdMobarokHossanMunna.jpeg", auctionPrice: null, team: null },
-            { name: "Pat Cummins", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/RanaIslamRabby.jpeg", auctionPrice: null, team: null },
-            { name: "Hardik Pandya", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/ShiabGazi.jpeg", auctionPrice: null, team: null },
-            { name: "Kagiso Rabada", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdJihad.jpeg", auctionPrice: null, team: null },
-            { name: "Quinton de Kock", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/SojibSheikh.jpeg", auctionPrice: null, team: null },
-            { name: "Chris Gayle", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/DibbojeetMondal.jpeg", auctionPrice: null, team: null },
-            { name: "Andre Russell", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/HamzaMulla.jpeg", auctionPrice: null, team: null },
-            { name: "Sunil Narine", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdMobarokHossanMunna.jpeg", auctionPrice: null, team: null },
-            { name: "Kieron Pollard", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/RanaIslamRabby.jpeg", auctionPrice: null, team: null },
-            { name: "Rohit Sharma", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/ShiabGazi.jpeg", auctionPrice: null, team: null },
-            { name: "KL Rahul", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdJihad.jpeg", auctionPrice: null, team: null },
-            { name: "Rishabh Pant", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/SojibSheikh.jpeg", auctionPrice: null, team: null },
-            { name: "Jasprit Bumrah", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/DibbojeetMondal.jpeg", auctionPrice: null, team: null },
-            { name: "Mohammed Shami", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/HamzaMulla.jpeg", auctionPrice: null, team: null },
-            { name: "Yuzvendra Chahal", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdMobarokHossanMunna.jpeg", auctionPrice: null, team: null },
-            { name: "Ravindra Jadeja", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/RanaIslamRabby.jpeg", auctionPrice: null, team: null },
-            { name: "Shikhar Dhawan", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/ShiabGazi.jpeg", auctionPrice: null, team: null },
-            { name: "Bhuvneshwar Kumar", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdJihad.jpeg", auctionPrice: null, team: null },
-            { name: "Shardul Thakur", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/SojibSheikh.jpeg", auctionPrice: null, team: null },
-            { name: "Ishan Kishan", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/DibbojeetMondal.jpeg", auctionPrice: null, team: null },
-            { name: "Shreyas Iyer", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/HamzaMulla.jpeg", auctionPrice: null, team: null },
-            { name: "Sanju Samson", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdMobarokHossanMunna.jpeg", auctionPrice: null, team: null },
-            { name: "Ben Stokes", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/RanaIslamRabby.jpeg", auctionPrice: null, team: null },
-            { name: "Jos Buttler", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/ShiabGazi.jpeg", auctionPrice: null, team: null },
-            { name: "Jonny Bairstow", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdJihad.jpeg", auctionPrice: null, team: null },
-            { name: "Jason Roy", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/SojibSheikh.jpeg", auctionPrice: null, team: null },
-            { name: "Moeen Ali", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/DibbojeetMondal.jpeg", auctionPrice: null, team: null },
-            { name: "Sam Curran", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/HamzaMulla.jpeg", auctionPrice: null, team: null },
-            { name: "Liam Livingstone", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdMobarokHossanMunna.jpeg", auctionPrice: null, team: null },
-            { name: "Adil Rashid", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/RanaIslamRabby.jpeg", auctionPrice: null, team: null },
-            { name: "Rashid Khan", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/ShiabGazi.jpeg", auctionPrice: null, team: null },
-            { name: "Mohammad Nabi", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdJihad.jpeg", auctionPrice: null, team: null },
-            { name: "Mujeeb Ur Rahman", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/SojibSheikh.jpeg", auctionPrice: null, team: null },
-            { name: "Babar Azam", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/DibbojeetMondal.jpeg", auctionPrice: null, team: null },
-            { name: "Shaheen Afridi", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/HamzaMulla.jpeg", auctionPrice: null, team: null },
-            { name: "Shadab Khan", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdMobarokHossanMunna.jpeg", auctionPrice: null, team: null },
-            { name: "Haris Rauf", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/RanaIslamRabby.jpeg", auctionPrice: null, team: null },
-            { name: "Kane Williamson", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/ShiabGazi.jpeg", auctionPrice: null, team: null },
-            { name: "Tim Southee", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdJihad.jpeg", auctionPrice: null, team: null },
-            { name: "Martin Guptill", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/SojibSheikh.jpeg", auctionPrice: null, team: null },
-            { name: "Mitchell Santner", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/DibbojeetMondal.jpeg", auctionPrice: null, team: null },
-            { name: "AB de Villiers", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/HamzaMulla.jpeg", auctionPrice: null, team: null },
-            { name: "Faf du Plessis", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdMobarokHossanMunna.jpeg", auctionPrice: null, team: null },
-            { name: "Imran Tahir", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/RanaIslamRabby.jpeg", auctionPrice: null, team: null },
-            { name: "Dale Steyn", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/ShiabGazi.jpeg", auctionPrice: null, team: null },
-            { name: "Lungi Ngidi", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdJihad.jpeg", auctionPrice: null, team: null },
-            { name: "Aiden Markram", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/SojibSheikh.jpeg", auctionPrice: null, team: null },
+            // Normal Players (50 players) - with position ranges
+            { name: "Mitchell Starc", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/SojibSheikh.jpeg", auctionPrice: null, team: null, positionRange: [1, 10] },
+            { name: "Glenn Maxwell", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/DibbojeetMondal.jpeg", auctionPrice: null, team: null, positionRange: [1, 10] },
+            { name: "Trent Boult", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/HamzaMulla.jpeg", auctionPrice: null, team: null, positionRange: [1, 10] },
+            { name: "Marcus Stoinis", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdMobarokHossanMunna.jpeg", auctionPrice: null, team: null, positionRange: [1, 10] },
+            { name: "Pat Cummins", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/RanaIslamRabby.jpeg", auctionPrice: null, team: null, positionRange: [1, 10] },
+            { name: "Hardik Pandya", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/ShiabGazi.jpeg", auctionPrice: null, team: null, positionRange: [11, 20] },
+            { name: "Kagiso Rabada", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdJihad.jpeg", auctionPrice: null, team: null, positionRange: [11, 20] },
+            { name: "Quinton de Kock", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/SojibSheikh.jpeg", auctionPrice: null, team: null, positionRange: [11, 20] },
+            { name: "Chris Gayle", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/DibbojeetMondal.jpeg", auctionPrice: null, team: null, positionRange: [11, 20] },
+            { name: "Andre Russell", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/HamzaMulla.jpeg", auctionPrice: null, team: null, positionRange: [11, 20] },
+            { name: "Sunil Narine", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdMobarokHossanMunna.jpeg", auctionPrice: null, team: null, positionRange: [21, 30] },
+            { name: "Kieron Pollard", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/RanaIslamRabby.jpeg", auctionPrice: null, team: null, positionRange: [21, 30] },
+            { name: "Rohit Sharma", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/ShiabGazi.jpeg", auctionPrice: null, team: null, positionRange: [21, 30] },
+            { name: "KL Rahul", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdJihad.jpeg", auctionPrice: null, team: null, positionRange: [21, 30] },
+            { name: "Rishabh Pant", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/SojibSheikh.jpeg", auctionPrice: null, team: null, positionRange: [21, 30] },
+            { name: "Jasprit Bumrah", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/DibbojeetMondal.jpeg", auctionPrice: null, team: null, positionRange: [31, 40] },
+            { name: "Mohammed Shami", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/HamzaMulla.jpeg", auctionPrice: null, team: null, positionRange: [31, 40] },
+            { name: "Yuzvendra Chahal", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdMobarokHossanMunna.jpeg", auctionPrice: null, team: null, positionRange: [31, 40] },
+            { name: "Ravindra Jadeja", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/RanaIslamRabby.jpeg", auctionPrice: null, team: null, positionRange: [31, 40] },
+            { name: "Shikhar Dhawan", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/ShiabGazi.jpeg", auctionPrice: null, team: null, positionRange: [31, 40] },
+            { name: "Bhuvneshwar Kumar", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdJihad.jpeg", auctionPrice: null, team: null, positionRange: [41, 50] },
+            { name: "Shardul Thakur", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/SojibSheikh.jpeg", auctionPrice: null, team: null, positionRange: [41, 50] },
+            { name: "Ishan Kishan", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/DibbojeetMondal.jpeg", auctionPrice: null, team: null, positionRange: [41, 50] },
+            { name: "Shreyas Iyer", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/HamzaMulla.jpeg", auctionPrice: null, team: null, positionRange: [41, 50] },
+            { name: "Sanju Samson", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdMobarokHossanMunna.jpeg", auctionPrice: null, team: null, positionRange: [41, 50] },
+            { name: "Ben Stokes", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/RanaIslamRabby.jpeg", auctionPrice: null, team: null, positionRange: [1, 50] },
+            { name: "Jos Buttler", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/ShiabGazi.jpeg", auctionPrice: null, team: null, positionRange: [1, 50] },
+            { name: "Jonny Bairstow", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdJihad.jpeg", auctionPrice: null, team: null, positionRange: [1, 50] },
+            { name: "Jason Roy", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/SojibSheikh.jpeg", auctionPrice: null, team: null, positionRange: [1, 50] },
+            { name: "Moeen Ali", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/DibbojeetMondal.jpeg", auctionPrice: null, team: null, positionRange: [1, 50] },
+            { name: "Sam Curran", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/HamzaMulla.jpeg", auctionPrice: null, team: null, positionRange: [1, 50] },
+            { name: "Liam Livingstone", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdMobarokHossanMunna.jpeg", auctionPrice: null, team: null, positionRange: [1, 50] },
+            { name: "Adil Rashid", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/RanaIslamRabby.jpeg", auctionPrice: null, team: null, positionRange: [1, 50] },
+            { name: "Rashid Khan", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/ShiabGazi.jpeg", auctionPrice: null, team: null, positionRange: [1, 50] },
+            { name: "Mohammad Nabi", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdJihad.jpeg", auctionPrice: null, team: null, positionRange: [1, 50] },
+            { name: "Mujeeb Ur Rahman", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/SojibSheikh.jpeg", auctionPrice: null, team: null, positionRange: [1, 50] },
+            { name: "Babar Azam", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/DibbojeetMondal.jpeg", auctionPrice: null, team: null, positionRange: [1, 50] },
+            { name: "Shaheen Afridi", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/HamzaMulla.jpeg", auctionPrice: null, team: null, positionRange: [1, 50] },
+            { name: "Shadab Khan", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdMobarokHossanMunna.jpeg", auctionPrice: null, team: null, positionRange: [1, 50] },
+            { name: "Haris Rauf", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/RanaIslamRabby.jpeg", auctionPrice: null, team: null, positionRange: [1, 50] },
+            { name: "Kane Williamson", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/ShiabGazi.jpeg", auctionPrice: null, team: null, positionRange: [1, 50] },
+            { name: "Tim Southee", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdJihad.jpeg", auctionPrice: null, team: null, positionRange: [1, 50] },
+            { name: "Martin Guptill", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/SojibSheikh.jpeg", auctionPrice: null, team: null, positionRange: [1, 50] },
+            { name: "Mitchell Santner", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/DibbojeetMondal.jpeg", auctionPrice: null, team: null, positionRange: [1, 50] },
+            { name: "AB de Villiers", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/HamzaMulla.jpeg", auctionPrice: null, team: null, positionRange: [1, 50] },
+            { name: "Faf du Plessis", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdMobarokHossanMunna.jpeg", auctionPrice: null, team: null, positionRange: [1, 50] },
+            { name: "Imran Tahir", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/RanaIslamRabby.jpeg", auctionPrice: null, team: null, positionRange: [1, 50] },
+            { name: "Dale Steyn", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/ShiabGazi.jpeg", auctionPrice: null, team: null, positionRange: [1, 50] },
+            { name: "Lungi Ngidi", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdJihad.jpeg", auctionPrice: null, team: null, positionRange: [1, 50] },
+            { name: "Aiden Markram", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/SojibSheikh.jpeg", auctionPrice: null, team: null, positionRange: [1, 50] },
         ];
         
         function init() {
             loadFromStorage();
             recalculateTeamBudgets();
             
-            // Auto-randomize iconic players on first load if in ICONIC category
-            if (currentCategory === 'ICONIC') {
-                randomizeIconicPlayersOnce();
-            }
+            // Initialize lottery system
+            initializeLottery();
+            
+            // Start with first player in shuffled order
+            currentDisplayIndex = 0;
+            currentPlayerIndex = shuffledIndices[0];
             
             displayCurrentPlayer();
         }
@@ -1153,16 +1210,17 @@ Let's play together, win together.`
 
         function changeCategory(newCategory) {
             currentCategory = newCategory;
-            currentPlayerIndex = 0;
             document.querySelectorAll('.category-tab').forEach(tab => {
                 tab.classList.remove('active');
             });
             document.querySelector(`.category-tab.${newCategory.toLowerCase()}`).classList.add('active');
             
-            // Auto-randomize iconic players when switching to ICONIC category
-            if (newCategory === 'ICONIC') {
-                randomizeIconicPlayersOnce();
-            }
+            // Initialize lottery for new category
+            initializeLottery();
+            
+            // Start with first player in shuffled order
+            currentDisplayIndex = 0;
+            currentPlayerIndex = shuffledIndices[0];
             
             displayCurrentPlayer();
         }
@@ -1200,7 +1258,8 @@ Let's play together, win together.`
                 ? `<img src="${player.imageURL}" alt="${player.name}" class="player-image-large">`
                 : `<div class="player-image-large" style="background-color: #f3f4f6; border: 8px solid #9ca3af; display: flex; align-items: center; justify-content: center; font-size: 1.5em; color: #6b7280;">No Image</div>`;
             
-            screen.innerHTML = `${imageHTML}<div class="player-name-large">${player.name}</div>${soldLabel}<div class="player-category-badge ${badgeClass}">${categoryText}</div>${priceDisplay}${teamSelector}<div class="navigation-buttons"><button class="nav-btn" onclick="previousPlayer()" ${currentPlayerIndex === 0 ? 'disabled' : ''}>⬅️ Previous</button><button class="nav-btn" onclick="nextPlayer()" ${currentPlayerIndex === currentPlayers.length - 1 ? 'disabled' : ''}>Next ➡️</button></div><div class="player-counter">${currentPlayerIndex + 1} / ${currentPlayers.length}</div>`;
+            // Use currentDisplayIndex for counter (sequential 1, 2, 3...)
+            screen.innerHTML = `${imageHTML}<div class="player-name-large">${player.name}</div>${soldLabel}<div class="player-category-badge ${badgeClass}">${categoryText}</div>${priceDisplay}${teamSelector}<div class="navigation-buttons"><button class="nav-btn" onclick="previousPlayer()" ${currentDisplayIndex === 0 ? 'disabled' : ''}>⬅️ Previous</button><button class="nav-btn" onclick="nextPlayer()" ${currentDisplayIndex === currentPlayers.length - 1 ? 'disabled' : ''}>Next ➡️</button></div><div class="player-counter">${currentDisplayIndex + 1} / ${currentPlayers.length}</div>`;
             
             // Set price input to current player's base price (not previous price)
             setTimeout(() => {
@@ -1215,15 +1274,18 @@ Let's play together, win together.`
 
         function nextPlayer() {
             const currentPlayers = getCurrentCategoryPlayers();
-            if (currentPlayerIndex < currentPlayers.length - 1) {
-                currentPlayerIndex++;
+            
+            if (currentDisplayIndex < shuffledIndices.length - 1) {
+                currentDisplayIndex++;
+                currentPlayerIndex = shuffledIndices[currentDisplayIndex];
                 displayCurrentPlayer();
             }
         }
 
         function previousPlayer() {
-            if (currentPlayerIndex > 0) {
-                currentPlayerIndex--;
+            if (currentDisplayIndex > 0) {
+                currentDisplayIndex--;
+                currentPlayerIndex = shuffledIndices[currentDisplayIndex];
                 displayCurrentPlayer();
             }
         }
@@ -1827,7 +1889,7 @@ Let's play together, win together.`
         window.onload = init;
 
         // Add keyboard shortcut: Ctrl+M to decrease price, Ctrl+I to increase price
-        // Ctrl+J to jump to player (in Normal category)
+        // Ctrl+P to go to specific position
         document.addEventListener('keydown', function(event) {
             // Check if Ctrl+M is pressed (Ctrl key + M key)
             if ((event.ctrlKey || event.metaKey) && event.key === 'm') {
@@ -1841,23 +1903,10 @@ Let's play together, win together.`
                 incrementPrice();
             }
             
-            // Check if Ctrl+J is pressed for jump to player (only in NORMAL category)
-            if ((event.ctrlKey || event.metaKey) && event.key === 'j') {
-                if (currentCategory === 'NORMAL') {
-                    event.preventDefault();
-                    const playerNum = prompt('Enter player number (1-50):');
-                    if (playerNum) {
-                        const num = parseInt(playerNum);
-                        const normalPlayers = getCurrentCategoryPlayers();
-                        
-                        if (!isNaN(num) && num >= 1 && num <= normalPlayers.length) {
-                            currentPlayerIndex = num - 1;
-                            displayCurrentPlayer();
-                        } else {
-                            alert(`⚠️ Please enter a number between 1 and ${normalPlayers.length}!`);
-                        }
-                    }
-                }
+            // Check if Ctrl+P is pressed for position selection
+            if ((event.ctrlKey || event.metaKey) && event.key === 'p') {
+                event.preventDefault();
+                goToSpecificPosition();
             }
         });
     </script>
