@@ -965,12 +965,32 @@
             // Get all players in current category
             const currentPlayers = getCurrentCategoryPlayers();
             
-            // Create position slots (1 to total players)
-            const totalPositions = currentPlayers.length;
+            // Filter only UNSOLD players
+            const unsoldPlayers = [];
+            const unsoldIndices = [];
+            
+            currentPlayers.forEach((player, index) => {
+                if (!player.auctionPrice) {
+                    unsoldPlayers.push(player);
+                    unsoldIndices.push(index);
+                }
+            });
+            
+            if (unsoldPlayers.length === 0) {
+                // All players are sold
+                shuffledIndices = [];
+                currentDisplayIndex = 0;
+                return;
+            }
+            
+            // Create position slots for unsold players only
+            const totalPositions = unsoldPlayers.length;
             const positionSlots = Array(totalPositions).fill(null);
             
             // First pass: Assign players with specific position ranges
-            currentPlayers.forEach((player, index) => {
+            unsoldPlayers.forEach((player, arrayIndex) => {
+                const originalIndex = unsoldIndices[arrayIndex];
+                
                 if (player.positionRange) {
                     const [minPos, maxPos] = player.positionRange;
                     
@@ -985,16 +1005,16 @@
                     if (availablePositions.length > 0) {
                         // Randomly pick a position from available positions in range
                         const randomPos = availablePositions[Math.floor(Math.random() * availablePositions.length)];
-                        positionSlots[randomPos] = index;
+                        positionSlots[randomPos] = originalIndex;
                     }
                 }
             });
             
             // Second pass: Fill remaining positions with unassigned players
             const unassignedPlayers = [];
-            currentPlayers.forEach((player, index) => {
-                if (!positionSlots.includes(index)) {
-                    unassignedPlayers.push(index);
+            unsoldIndices.forEach((originalIndex) => {
+                if (!positionSlots.includes(originalIndex)) {
+                    unassignedPlayers.push(originalIndex);
                 }
             });
             
@@ -1234,6 +1254,12 @@ Let's play together, win together.`
                 return;
             }
             
+            // Check if all players are sold
+            if (shuffledIndices.length === 0) {
+                screen.innerHTML = '<div class="no-players" style="color: #059669;">🎉 All players in this category are SOLD!</div>';
+                return;
+            }
+            
             const player = currentPlayers[currentPlayerIndex];
             const badgeClass = `badge-${player.category.toLowerCase()}`;
             
@@ -1258,8 +1284,8 @@ Let's play together, win together.`
                 ? `<img src="${player.imageURL}" alt="${player.name}" class="player-image-large">`
                 : `<div class="player-image-large" style="background-color: #f3f4f6; border: 8px solid #9ca3af; display: flex; align-items: center; justify-content: center; font-size: 1.5em; color: #6b7280;">No Image</div>`;
             
-            // Use currentDisplayIndex for counter (sequential 1, 2, 3...)
-            screen.innerHTML = `${imageHTML}<div class="player-name-large">${player.name}</div>${soldLabel}<div class="player-category-badge ${badgeClass}">${categoryText}</div>${priceDisplay}${teamSelector}<div class="navigation-buttons"><button class="nav-btn" onclick="previousPlayer()" ${currentDisplayIndex === 0 ? 'disabled' : ''}>⬅️ Previous</button><button class="nav-btn" onclick="nextPlayer()" ${currentDisplayIndex === currentPlayers.length - 1 ? 'disabled' : ''}>Next ➡️</button></div><div class="player-counter">${currentDisplayIndex + 1} / ${currentPlayers.length}</div>`;
+            // Use currentDisplayIndex for counter (sequential 1, 2, 3...) but only for UNSOLD players
+            screen.innerHTML = `${imageHTML}<div class="player-name-large">${player.name}</div>${soldLabel}<div class="player-category-badge ${badgeClass}">${categoryText}</div>${priceDisplay}${teamSelector}<div class="navigation-buttons"><button class="nav-btn" onclick="previousPlayer()" ${currentDisplayIndex === 0 ? 'disabled' : ''}>⬅️ Previous</button><button class="nav-btn" onclick="nextPlayer()" ${currentDisplayIndex === shuffledIndices.length - 1 ? 'disabled' : ''}>Next ➡️</button></div><div class="player-counter">${currentDisplayIndex + 1} / ${shuffledIndices.length}</div>`;
             
             // Set price input to current player's base price (not previous price)
             setTimeout(() => {
@@ -1273,7 +1299,10 @@ Let's play together, win together.`
         }
 
         function nextPlayer() {
-            const currentPlayers = getCurrentCategoryPlayers();
+            if (shuffledIndices.length === 0) {
+                alert('🎉 All players in this category are SOLD!');
+                return;
+            }
             
             if (currentDisplayIndex < shuffledIndices.length - 1) {
                 currentDisplayIndex++;
@@ -1283,6 +1312,11 @@ Let's play together, win together.`
         }
 
         function previousPlayer() {
+            if (shuffledIndices.length === 0) {
+                alert('🎉 All players in this category are SOLD!');
+                return;
+            }
+            
             if (currentDisplayIndex > 0) {
                 currentDisplayIndex--;
                 currentPlayerIndex = shuffledIndices[currentDisplayIndex];
@@ -1513,6 +1547,16 @@ Let's play together, win together.`
                 recalculateTeamBudgets();
                 
                 showWelcomePage(allPlayers[playerIndexInAll]);
+                
+                // Reinitialize lottery to exclude sold player
+                initializeLottery();
+                
+                // Move to next unsold player or show completion message
+                if (shuffledIndices.length > 0) {
+                    // Start from beginning after selling
+                    currentDisplayIndex = 0;
+                    currentPlayerIndex = shuffledIndices[0];
+                }
                 
                 displayCurrentPlayer();
                 priceInput.value = '';
