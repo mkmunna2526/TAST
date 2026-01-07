@@ -3,1043 +3,1862 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TikTok Gaming Hub</title>
+    <title>Cricket Player Auction</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
             min-height: 100vh;
-            color: #333;
-        }
-        
-        .container {
-            max-width: 400px;
-            margin: 0 auto;
-            background: #fff;
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-        }
-        
-        .header {
-            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
-            padding: 20px;
-            text-align: center;
-            color: white;
-            position: relative;
-        }
-        
-        .header h1 {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-        
-        .balance-display {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(255,255,255,0.2);
-            padding: 10px 15px;
-            border-radius: 25px;
-            margin-top: 10px;
-        }
-        
-        .coin-icon {
-            width: 24px;
-            height: 24px;
-            background: #ffd700;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #333;
-            margin-right: 8px;
-        }
-        
-        .content {
-            padding: 20px;
-            padding-bottom: 80px;
-        }
-        
-        .section {
-            display: none;
-        }
-        
-        .section.active {
-            display: block;
-        }
-        
-        /* Game Section */
-        .game-board {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 5px;
-            max-width: 300px;
-            margin: 20px auto;
-            background: #333;
-            padding: 5px;
-            border-radius: 10px;
-        }
-        
-        .game-cell {
-            aspect-ratio: 1;
-            background: #fff;
-            border: none;
-            font-size: 36px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            border-radius: 5px;
-        }
-        
-        .game-cell:hover {
-            background: #f0f0f0;
-        }
-        
-        .game-cell.x {
-            color: #ff6b6b;
-        }
-        
-        .game-cell.o {
-            color: #4ecdc4;
-        }
-        
-        .game-status {
-            text-align: center;
-            margin: 20px 0;
-            font-size: 18px;
-            font-weight: bold;
-        }
-        
-        .reset-btn {
-            display: block;
-            margin: 20px auto;
-            padding: 12px 30px;
-            background: #4ecdc4;
-            color: white;
-            border: none;
-            border-radius: 25px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .reset-btn:hover {
-            background: #45b7aa;
-            transform: translateY(-2px);
-        }
-        
-        /* Shop Section */
-        .shop-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        .shop-item {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: none;
-        }
-        
-        .shop-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-        
-        .shop-item h3 {
-            margin-bottom: 10px;
-            font-size: 18px;
-        }
-        
-        .shop-item .price {
-            font-size: 16px;
-            opacity: 0.9;
-        }
-        
-        /* Tasks Section */
-        .task-list {
-            margin-top: 20px;
-        }
-        
-        .task-item {
-            background: #f8f9fa;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-left: 4px solid #4ecdc4;
-        }
-        
-        .task-info h4 {
-            margin-bottom: 5px;
-            color: #333;
-        }
-        
-        .task-info p {
-            color: #666;
-            font-size: 14px;
-        }
-        
-        .task-btn {
-            padding: 8px 16px;
-            background: #4ecdc4;
-            color: white;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .task-btn:hover {
-            background: #45b7aa;
-        }
-        
-        /* Profile Section */
-        .profile-card {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            padding: 25px;
-            border-radius: 20px;
-            color: white;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        .profile-avatar {
-            width: 80px;
-            height: 80px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 50%;
-            margin: 0 auto 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        .stat-card {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-        }
-        
-        .stat-card h3 {
-            font-size: 24px;
-            color: #4ecdc4;
-            margin-bottom: 5px;
-        }
-        
-        .stat-card p {
-            color: #666;
-            font-size: 14px;
-        }
-        
-        /* Referral Section */
-        .referral-section {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 15px;
-            margin-top: 20px;
-        }
-        
-        .referral-link {
-            background: white;
             padding: 10px;
-            border-radius: 8px;
-            border: 2px dashed #4ecdc4;
-            margin: 10px 0;
-            word-break: break-all;
-            font-family: monospace;
+            position: relative;
+            overflow: hidden;
         }
-        
-        .copy-btn {
-            background: #4ecdc4;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        
-        /* Bottom Navigation */
-        .bottom-nav {
+
+        body::before {
+            content: '';
             position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 400px;
+            top: 20px;
+            right: 20px;
+            width: 200px;
+            height: 200px;
+            background-image: url('https://munnacodsit.xyz/Tournament-Lottery/in/sir/cpl.png');
+            background-size: cover;
+            background-position: center;
+            border-radius: 15px;
+            z-index: 1;
+        }
+
+        .team-budget-box {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
             background: white;
-            padding: 10px 0;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            z-index: 1;
+            max-width: 250px;
+            font-size: 0.85em;
+        }
+
+        .team-budget-box h3 {
+            color: #1e5128;
+            font-size: 1em;
+            margin-bottom: 8px;
+            text-align: center;
+            border-bottom: 2px solid #1e5128;
+            padding-bottom: 5px;
+        }
+
+        .team-budget-item {
             display: flex;
-            justify-content: space-around;
-            z-index: 1000;
+            justify-content: space-between;
+            padding: 4px 0;
+            font-size: 0.9em;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .team-budget-item:last-child {
+            border-bottom: none;
+        }
+
+        .team-budget-name {
+            font-weight: bold;
+            color: #9333ea;
+            flex: 1;
+        }
+
+        .team-budget-amount {
+            font-weight: bold;
+            color: #059669;
+            margin-left: 8px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .category-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .category-tab {
+            background: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .category-tab:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .category-tab.active {
+            background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);
+            color: white;
+        }
+
+        .category-tab.iconic { border: 3px solid #9333ea; }
+        .category-tab.normal { border: 3px solid #0284c7; }
+
+        .bank-panel {
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .bank-panel h2 {
+            color: #1e5128;
+            margin-bottom: 12px;
+            font-size: 1.4em;
+        }
+
+        .bank-input-group {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .bank-input-group input {
+            padding: 8px;
+            border: 2px solid #d1d5db;
+            border-radius: 5px;
+            font-size: 0.9em;
+            width: 180px;
+            text-align: center;
+        }
+
+        .bank-input-group button {
+            background: #059669;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .bank-input-group button:hover {
+            background: #047857;
+        }
+
+        .bank-input-group .btn-increment {
+            background: #f59e0b;
+        }
+
+        .bank-input-group .btn-increment:hover {
+            background: #d97706;
+        }
+
+        .bank-input-group .btn-decrement {
+            background: #dc2626;
+        }
+
+        .bank-input-group .btn-decrement:hover {
+            background: #991b1b;
+        }
+
+        .bank-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .bank-actions button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .btn-result-sheet {
+            background: #0284c7;
+            color: white;
+        }
+
+        .btn-result-sheet:hover {
+            background: #0369a1;
         }
         
-        .nav-item {
+        .btn-reset-data {
+            background: #dc2626;
+            color: white;
+        }
+
+        .btn-reset-data:hover {
+            background: #991b1b;
+        }
+
+        .player-screen {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            text-align: center;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .player-image-large {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            object-fit: contain;
+            object-position: center;
+            margin: 0 auto 15px;
+            border: 6px solid #ea580c;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            background-color: #f3f4f6;
+        }
+
+        .player-name-large {
+            font-size: 2em;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+
+        .player-category-badge {
+            display: inline-block;
+            padding: 6px 20px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .badge-iconic {
+            background: linear-gradient(135deg, #9333ea 0%, #7e22ce 100%);
+            color: white;
+        }
+
+        .badge-normal {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            color: white;
+        }
+
+        .price-info-box {
             display: flex;
             flex-direction: column;
             align-items: center;
-            cursor: pointer;
-            padding: 5px;
-            transition: all 0.3s;
-            border-radius: 10px;
+            margin-bottom: 15px;
         }
-        
-        .nav-item.active {
-            background: #f0f8ff;
-            color: #4ecdc4;
-        }
-        
-        .nav-icon {
-            font-size: 24px;
-            margin-bottom: 4px;
-        }
-        
-        .nav-label {
-            font-size: 12px;
-        }
-        
-        /* Admin Panel */
-        .admin-login {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            margin: 50px 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-        
-        .admin-login h2 {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #333;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
+
+        .base-price-display {
+            font-size: 1.3em;
+            color: #1e5128;
+            font-weight: bold;
             margin-bottom: 8px;
-            color: #555;
+        }
+
+        .sold-price-display {
+            font-size: 1.8em;
+            color: #dc2626;
             font-weight: bold;
         }
-        
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 16px;
+
+        .team-selector {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .team-btn {
+            background: white;
+            color: #1f2937;
+            padding: 8px 15px;
+            border: 3px solid #d1d5db;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
             transition: all 0.3s;
         }
-        
-        .form-group input:focus {
-            outline: none;
-            border-color: #4ecdc4;
-            box-shadow: 0 0 10px rgba(78, 205, 196, 0.2);
+
+        .team-btn:hover {
+            transform: scale(1.05);
+            border-color: #9333ea;
         }
-        
-        .login-btn {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+
+        .team-btn.selected {
+            background: linear-gradient(135deg, #9333ea 0%, #7e22ce 100%);
             color: white;
+            border-color: #9333ea;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .nav-btn {
+            background: #ea580c;
+            color: white;
+            padding: 10px 25px;
             border: none;
             border-radius: 10px;
-            font-size: 16px;
-            font-weight: bold;
             cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
             transition: all 0.3s;
         }
-        
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+
+        .nav-btn:hover {
+            background: #dc2626;
+            transform: scale(1.05);
         }
-        
-        /* Responsive Design */
-        @media (max-width: 480px) {
-            .container {
-                max-width: 100%;
-            }
-            
-            .game-board {
-                max-width: 250px;
-            }
-            
-            .shop-grid {
-                grid-template-columns: 1fr;
-            }
+
+        .nav-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: scale(1);
         }
-        
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        .player-counter {
+            font-size: 1.1em;
+            color: #6b7280;
+            margin-top: 12px;
         }
-        
-        .section.active {
-            animation: fadeIn 0.5s ease-out;
+
+        .no-players {
+            font-size: 1.5em;
+            color: #6b7280;
+            padding: 100px 20px;
         }
-        
-        /* Loading Spinner */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
+
+        /* Welcome Page Styles */
+        .welcome-page-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1e5128 0%, #2d6a4f 50%, #40916c 100%);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            overflow: hidden;
+        }
+
+        .welcome-content {
+            position: relative;
+            width: 90%;
+            max-width: 1000px;
+            height: 90vh;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .firework {
+            position: absolute;
+            width: 5px;
+            height: 5px;
             border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
+            animation: explode 1s ease-out forwards;
         }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+
+        @keyframes explode {
+            0% {
+                transform: translate(0, 0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty));
+                opacity: 0;
+            }
+        }
+
+        .welcome-player-image-container {
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeInImage 1s ease-out forwards;
+            animation-delay: 1s;
+        }
+
+        .welcome-player-img {
+            width: 350px;
+            height: 350px;
+            object-fit: contain;
+            object-position: center;
+            border: 8px solid #9333ea;
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            background-color: #f3f4f6;
+        }
+
+        @keyframes fadeInImage {
+            from {
+                opacity: 0;
+                transform: scale(0.8) rotate(-5deg);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        .welcome-message {
+            text-align: center;
+            max-width: 800px;
+            opacity: 0;
+            animation: fadeInText 1s ease-out forwards;
+            animation-delay: 1.5s;
+        }
+
+        .welcome-team-name {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #9333ea;
+            margin-bottom: 20px;
+        }
+
+        .welcome-player-name {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #dc2626;
+            margin-bottom: 20px;
+        }
+
+        .welcome-text {
+            font-size: 1.3em;
+            line-height: 1.8;
+            color: #1f2937;
+            margin-bottom: 15px;
+        }
+
+        .welcome-signature {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #059669;
+            margin-top: 30px;
+        }
+
+        @keyframes fadeInText {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .close-welcome-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            z-index: 10;
+        }
+
+        .close-welcome-btn:hover {
+            background: #991b1b;
+        }
+
+        .result-sheet-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .result-sheet-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+        }
+
+        .result-sheet-content h2 {
+            color: #1e5128;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .team-tabs {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .team-tab {
+            background: white;
+            color: #1f2937;
+            padding: 12px 20px;
+            border: 3px solid #d1d5db;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .team-tab:hover {
+            transform: scale(1.05);
+            border-color: #9333ea;
+        }
+
+        .team-tab.active-team {
+            background: linear-gradient(135deg, #9333ea 0%, #7e22ce 100%);
+            color: white;
+            border-color: #9333ea;
+        }
+
+        .view-tabs {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .view-tab {
+            background: white;
+            color: #1f2937;
+            padding: 12px 30px;
+            border: 3px solid #d1d5db;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .view-tab:hover {
+            transform: scale(1.05);
+            border-color: #0284c7;
+        }
+
+        .view-tab.active-view {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            color: white;
+            border-color: #0284c7;
+        }
+
+        .team-players-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .player-card {
+            background: white;
+            border: 3px solid #9333ea;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .player-card-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: contain;
+            object-position: center;
+            margin: 0 auto 10px;
+            border: 4px solid #9333ea;
+            background-color: #f3f4f6;
+        }
+
+        .player-card-name {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .player-card-price {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #059669;
+        }
+
+        .no-team-players {
+            text-align: center;
+            color: #6b7280;
+            font-size: 1.2em;
+            padding: 40px;
+        }
+
+        .result-sheet-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .result-sheet-content th, .result-sheet-content td {
+            color: #1f2937;
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .result-sheet-content th {
+            background-color: #f3f4f6;
+            color: #1f2937;
+        }
+
+        .result-sheet-content .close-btn {
+            background: #dc2626;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .btn-download-pdf {
+            background: #059669;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+        }
+
+        .btn-download-pdf:hover {
+            background: #047857;
+        }
+
+        .pdf-preview {
+            display: none;
+            position: fixed;
+            left: -9999px;
+            top: 0;
+        }
+
+        .pdf-page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 15mm;
+            background: white;
+            box-sizing: border-box;
+            page-break-after: always;
+            margin-bottom: 10px;
+        }
+
+        .pdf-page h1 {
+            text-align: center;
+            color: #1e5128;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .pdf-page-number {
+            text-align: center;
+            color: #6b7280;
+            font-size: 12px;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #d1d5db;
+        }
+
+        .pdf-page table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+        }
+
+        .pdf-page th, .pdf-page td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .pdf-page th {
+            background-color: #1e5128;
+            color: white;
+            font-weight: bold;
+        }
+
+        .pdf-page tr:nth-child(even) {
+            background-color: #f3f4f6;
+        }
+
+        .pdf-page .sold {
+            color: #059669;
+            font-weight: bold;
+        }
+
+        .pdf-page .unsold {
+            color: #ea580c;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            body::before {
+                width: 100px;
+                height: 100px;
+                top: 10px;
+                right: 10px;
+            }
+
+            .team-budget-box {
+                display: none;
+            }
+
+            body {
+                padding: 10px;
+            }
+
+            .category-tabs {
+                gap: 10px;
+            }
+
+            .category-tab {
+                padding: 10px 15px;
+                font-size: 1em;
+            }
+
+            .bank-panel {
+                padding: 15px;
+            }
+
+            .bank-panel h2 {
+                font-size: 1.5em;
+            }
+
+            .bank-input-group {
+                flex-direction: column;
+            }
+
+            .bank-input-group input {
+                width: 100%;
+            }
+
+            .bank-actions {
+                flex-direction: column;
+            }
+
+            .bank-actions button {
+                width: 100%;
+            }
+
+            .player-image-large {
+                width: 250px;
+                height: 250px;
+            }
+
+            .player-name-large {
+                font-size: 2em;
+            }
+
+            .player-category-badge {
+                font-size: 1.2em;
+            }
+
+            .welcome-player-img {
+                width: 250px;
+                height: 250px;
+            }
+
+            .welcome-team-name {
+                font-size: 1.8em;
+            }
+
+            .welcome-player-name {
+                font-size: 1.8em;
+            }
+
+            .welcome-text {
+                font-size: 1.1em;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="team-budget-box" id="teamBudgetBox"></div>
     <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <h1>🎮 TikTok Gaming Hub</h1>
-            <div class="balance-display">
-                <div>
-                    <span class="coin-icon">₽</span>
-                    <span id="balance">0</span> Coins
-                </div>
-                <div>
-                    🏆 <span id="points">0</span> Points
-                </div>
+        <div class="bank-panel">
+            <h2>CIVIL PREMIER LEAGUE</h2>
+            <div class="bank-input-group">
+                <input type="number" id="auctionPriceInput" placeholder="Enter sold price (e.g., 150)" readonly>
+                <button onclick="incrementPrice()" class="btn-increment">💰 Increase Price</button>
+                <button onclick="setAuctionPrice()">Set Price</button>
+                <span style="color: white; font-size: 0.85em; margin-left: 10px;">💡 Ctrl+I = Increase | Ctrl+M = Decrease | Ctrl+J = Jump (Normal)</span>
+            </div>
+            <div class="bank-actions">
+                <button class="btn-reset-data" onclick="startSecondRound()" style="background: #f59e0b;">
+                    🔄 Start 2nd Round (UNSOLD → 20)
+                </button>
+                <button class="btn-result-sheet" onclick="showResultSheet()">
+                    View Result Sheet
+                </button>
+                <button class="btn-reset-data" onclick="resetData()">
+                    Complete Reset (Delete All Data)
+                </button>
             </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="content">
-            <!-- Game Section -->
-            <div id="game-section" class="section active">
-                <div class="game-status" id="game-status">Your Turn - Click to Play!</div>
-                <div class="game-board" id="game-board">
-                    <button class="game-cell" data-index="0"></button>
-                    <button class="game-cell" data-index="1"></button>
-                    <button class="game-cell" data-index="2"></button>
-                    <button class="game-cell" data-index="3"></button>
-                    <button class="game-cell" data-index="4"></button>
-                    <button class="game-cell" data-index="5"></button>
-                    <button class="game-cell" data-index="6"></button>
-                    <button class="game-cell" data-index="7"></button>
-                    <button class="game-cell" data-index="8"></button>
-                </div>
-                <button class="reset-btn" onclick="resetGame()">🔄 New Game</button>
+        <div class="category-tabs">
+            <div class="category-tab iconic active" onclick="changeCategory('ICONIC')">
+                👑 Iconic Player
             </div>
-
-            <!-- Shop Section -->
-            <div id="shop-section" class="section">
-                <h2>💰 Coin Shop</h2>
-                <div class="shop-grid">
-                    <button class="shop-item" onclick="purchaseCoins(100, 0.1)">
-                        <h3>💎 Starter Pack</h3>
-                        <p class="price">100 Coins<br>0.1 TON</p>
-                    </button>
-                    <button class="shop-item" onclick="purchaseCoins(500, 0.4)">
-                        <h3>🚀 Power Pack</h3>
-                        <p class="price">500 Coins<br>0.4 TON</p>
-                    </button>
-                    <button class="shop-item" onclick="purchaseCoins(1000, 0.7)">
-                        <h3>👑 Premium Pack</h3>
-                        <p class="price">1000 Coins<br>0.7 TON</p>
-                    </button>
-                    <button class="shop-item" onclick="purchaseCoins(2500, 1.5)">
-                        <h3>💫 Ultimate Pack</h3>
-                        <p class="price">2500 Coins<br>1.5 TON</p>
-                    </button>
-                </div>
+            <div class="category-tab normal" onclick="changeCategory('NORMAL')">
+                ⭐ Normal Player
             </div>
+        </div>
 
-            <!-- Tasks Section -->
-            <div id="tasks-section" class="section">
-                <h2>📋 Daily Tasks</h2>
-                <div class="task-list">
-                    <div class="task-item">
-                        <div class="task-info">
-                            <h4>📺 Subscribe to YouTube</h4>
-                            <p>+100 Points</p>
-                        </div>
-                        <button class="task-btn" onclick="completeTask('youtube')">Complete</button>
-                    </div>
-                    <div class="task-item">
-                        <div class="task-info">
-                            <h4>📱 Join Telegram Channel</h4>
-                            <p>+150 Points</p>
-                        </div>
-                        <button class="task-btn" onclick="completeTask('telegram')">Complete</button>
-                    </div>
-                    <div class="task-item">
-                        <div class="task-info">
-                            <h4>👥 Join Telegram Group</h4>
-                            <p>+200 Points</p>
-                        </div>
-                        <button class="task-btn" onclick="completeTask('telegram-group')">Complete</button>
-                    </div>
-                    <div class="task-item">
-                        <div class="task-info">
-                            <h4>🤖 Follow Bot Updates</h4>
-                            <p>+75 Points</p>
-                        </div>
-                        <button class="task-btn" onclick="completeTask('bot')">Complete</button>
-                    </div>
-                </div>
-            </div>
+        <div class="player-screen" id="playerScreen"></div>
 
-            <!-- Profile Section -->
-            <div id="profile-section" class="section">
-                <div class="profile-card">
-                    <div class="profile-avatar">👤</div>
-                    <h3 id="username">Anonymous User</h3>
-                    <p>Member since today</p>
-                </div>
+        <!-- Welcome Page -->
+        <div class="welcome-page-overlay" id="welcomePageOverlay">
+            <div class="welcome-content">
+                <button class="close-welcome-btn" onclick="closeWelcomePage()">✖ Close</button>
                 
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <h3 id="total-games">0</h3>
-                        <p>Games Played</p>
+                <div class="welcome-player-image-container" id="welcomePlayerImageContainer"></div>
+                
+                <div class="welcome-message" id="welcomeMessage"></div>
+            </div>
+        </div>
+
+        <div class="result-sheet-overlay" id="resultSheetOverlay" onclick="hideResultSheet(event)">
+            <div class="result-sheet-content" onclick="event.stopPropagation()">
+                <h2>CIVIL PREMIER LEAGUE</h2>
+                
+                <div class="view-tabs">
+                    <div class="view-tab active-view" onclick="changeView('all')">
+                        Complete Result
                     </div>
-                    <div class="stat-card">
-                        <h3 id="games-won">0</h3>
-                        <p>Games Won</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3 id="total-points">0</h3>
-                        <p>Total Points</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3 id="total-coins">0</h3>
-                        <p>Total Coins</p>
+                    <div class="view-tab" onclick="changeView('team')">
+                        By Team
                     </div>
                 </div>
 
-                <div class="referral-section">
-                    <h3>🔗 Referral Program</h3>
-                    <p>Share your link and earn 50 points for each friend!</p>
-                    <div class="referral-link" id="referral-link">
-                        https://tiktok-game.com/ref/USER123
-                    </div>
-                    <button class="copy-btn" onclick="copyReferralLink()">📋 Copy Link</button>
-                    
-                    <div style="margin-top: 15px;">
-                        <h4>📊 Referral Stats</h4>
-                        <p>Total Referred: <span id="total-referrals">0</span></p>
-                        <p>Referral Points: <span id="referral-points">0</span></p>
+                <div id="teamTabsContainer" style="display: none;">
+                    <div class="team-tabs">
+                        <div class="team-tab active-team" onclick="showTeamPlayers('Dumuria Kings')">
+                            Dumuria Kings
+                        </div>
+                        <div class="team-tab" onclick="showTeamPlayers('Dumuria Strikers')">
+                            Dumuria Strikers
+                        </div>
+                        <div class="team-tab" onclick="showTeamPlayers('Dumuria Warriors')">
+                            Dumuria Warriors
+                        </div>
+                        <div class="team-tab" onclick="showTeamPlayers('Dumuria Titans')">
+                            Dumuria Titans
+                        </div>
+                        <div class="team-tab" onclick="showTeamPlayers('Dumuria Vikings')">
+                            Dumuria Vikings
+                        </div>
                     </div>
                 </div>
+
+                <div class="result-actions">
+                    <button class="btn-download-pdf" id="downloadBtn" onclick="downloadAllResult()">
+                        📥 Download Complete Result
+                    </button>
+                    <button class="btn-download-pdf" onclick="showAllCongratulations()" style="background: #9333ea;">
+                        🎉 Show Congratulations to All
+                    </button>
+                </div>
+
+                <div id="resultContainer"></div>
+
+                <button class="close-btn" onclick="hideResultSheet()">Close</button>
             </div>
         </div>
 
-        <!-- Bottom Navigation -->
-        <div class="bottom-nav">
-            <div class="nav-item active" onclick="showSection('game')">
-                <div class="nav-icon">🎮</div>
-                <div class="nav-label">Game</div>
-            </div>
-            <div class="nav-item" onclick="showSection('shop')">
-                <div class="nav-icon">🛒</div>
-                <div class="nav-label">Shop</div>
-            </div>
-            <div class="nav-item" onclick="showSection('tasks')">
-                <div class="nav-icon">📋</div>
-                <div class="nav-label">Tasks</div>
-            </div>
-            <div class="nav-item" onclick="showSection('profile')">
-                <div class="nav-icon">👤</div>
-                <div class="nav-label">Profile</div>
-            </div>
-        </div>
+        <div id="pdfPreview" class="pdf-preview"></div>
+        <div id="teamImagePreview" class="pdf-preview"></div>
     </div>
 
-    <!-- Admin Panel Modal -->
-    <div id="admin-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000;">
-        <div class="admin-login">
-            <h2>🔐 Admin Login</h2>
-            <div class="form-group">
-                <label>Email:</label>
-                <input type="email" id="admin-email" placeholder="Enter admin email">
-            </div>
-            <div class="form-group">
-                <label>Password:</label>
-                <input type="password" id="admin-password" placeholder="Enter admin password">
-            </div>
-            <button class="login-btn" onclick="adminLogin()">🚀 Login to Dashboard</button>
-            <button class="login-btn" style="background: #ff6b6b; margin-top: 10px;" onclick="closeAdminModal()">❌ Cancel</button>
-        </div>
-    </div>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
-        // Game State
-        let gameState = {
-            board: ['', '', '', '', '', '', '', '', ''],
-            currentPlayer: 'X',
-            gameActive: true,
-            playerMoved: false
+        let allPlayers = [];
+        let currentCategory = 'ICONIC';
+        let currentPlayerIndex = 0;
+        let currentTeam = 'Dumuria Kings';
+        let currentView = 'all';
+        const teams = ["Dumuria Kings", "Dumuria Strikers", "Dumuria Warriors", "Dumuria Titans", "Dumuria Vikings"];
+        
+        // Team budgets - each team starts with 2500
+        let teamBudgets = {
+            "Dumuria Kings": 2500,
+            "Dumuria Strikers": 2500,
+            "Dumuria Warriors": 2500,
+            "Dumuria Titans": 2500,
+            "Dumuria Vikings": 2500
         };
 
-        // User Data
-        let userData = {
-            balance: 0,
-            points: 0,
-            gamesPlayed: 0,
-            gamesWon: 0,
-            totalReferrals: 0,
-            referralPoints: 0,
-            username: 'Anonymous User',
-            completedTasks: []
-        };
+        // Track if iconic players are already randomized
+        let iconicPlayersRandomized = false;
 
-        // Load user data from localStorage simulation
-        function loadUserData() {
-            // In real implementation, this would connect to your database
-            const saved = localStorage.getItem('gameUserData');
-            if (saved) {
-                userData = {...userData, ...JSON.parse(saved)};
-                updateUI();
+        function updateTeamBudgetDisplay() {
+            const budgetBox = document.getElementById('teamBudgetBox');
+            let html = '<h3>💰 Team Budgets</h3>';
+            
+            for (let team of teams) {
+                const spent = 2500 - teamBudgets[team];
+                html += `
+                    <div class="team-budget-item">
+                        <span class="team-budget-name">${team}</span>
+                        <span class="team-budget-amount">${teamBudgets[team]}</span>
+                    </div>
+                `;
             }
+            
+            budgetBox.innerHTML = html;
         }
 
-        // Save user data
-        function saveUserData() {
-            localStorage.setItem('gameUserData', JSON.stringify(userData));
-            updateUI();
-        }
-
-        // Update UI elements
-        function updateUI() {
-            document.getElementById('balance').textContent = userData.balance;
-            document.getElementById('points').textContent = userData.points;
-            document.getElementById('username').textContent = userData.username;
-            document.getElementById('total-games').textContent = userData.gamesPlayed;
-            document.getElementById('games-won').textContent = userData.gamesWon;
-            document.getElementById('total-points').textContent = userData.points;
-            document.getElementById('total-coins').textContent = userData.balance;
-            document.getElementById('total-referrals').textContent = userData.totalReferrals;
-            document.getElementById('referral-points').textContent = userData.referralPoints;
-        }
-
-        // Game Logic
-        function initGame() {
-            const cells = document.querySelectorAll('.game-cell');
-            cells.forEach((cell, index) => {
-                cell.addEventListener('click', () => makeMove(index));
-                cell.textContent = '';
-                cell.classList.remove('x', 'o');
+        function recalculateTeamBudgets() {
+            // Reset all budgets to 2500
+            for (let team of teams) {
+                teamBudgets[team] = 2500;
+            }
+            
+            // Subtract spent amounts for sold players
+            allPlayers.forEach(player => {
+                if (player.auctionPrice && player.team) {
+                    teamBudgets[player.team] -= parseInt(player.auctionPrice);
+                }
             });
             
-            gameState = {
-                board: ['', '', '', '', '', '', '', '', ''],
-                currentPlayer: 'X',
-                gameActive: true,
-                playerMoved: false
-            };
-            
-            document.getElementById('game-status').textContent = 'Your Turn - Click to Play!';
+            updateTeamBudgetDisplay();
         }
 
-        function makeMove(index) {
-            if (!gameState.gameActive || gameState.board[index] !== '' || gameState.playerMoved) {
+        function randomizeIconicPlayersOnce() {
+            if (iconicPlayersRandomized) {
+                return; // Already randomized, don't do it again
+            }
+            
+            const iconicPlayers = allPlayers.filter(p => p.category === 'ICONIC');
+            const otherPlayers = allPlayers.filter(p => p.category !== 'ICONIC');
+            
+            // Fisher-Yates shuffle algorithm
+            for (let i = iconicPlayers.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [iconicPlayers[i], iconicPlayers[j]] = [iconicPlayers[j], iconicPlayers[i]];
+            }
+            
+            allPlayers = [...iconicPlayers, ...otherPlayers];
+            iconicPlayersRandomized = true;
+            saveToStorage();
+            console.log('Iconic players randomized automatically');
+        }
+
+        const teamWelcomeMessages = {
+            "Dumuria Kings": `{playerName} warm welcome to our team.
+We believe your skills and experience will make this team even stronger.
+We are proud to have you in the Dumuria Kings jersey this season.
+Best wishes for a successful season.`,
+            
+            "Dumuria Strikers": `Welcome {playerName}.
+Your talent and hard work will increase our team strength.
+Let's fight together and make this season memorable.
+Best wishes for you.`,
+            
+            "Dumuria Warriors": `Heartfelt welcome to {playerName}.
+This team means not just a game—it's a symbol of honor, responsibility and unity.
+We are hopeful that your participation will make the team stronger.`,
+            
+            "Dumuria Titans": `We are delighted to have {playerName}.
+Your skills and field mentality will play a big role in achieving our goals.
+Looking forward to the best performance together this season.`,
+            
+            "Dumuria Vikings": `Welcome {playerName} to the team.
+Your experience and dedication are valuable additions to our team.
+Let's play together, win together.`
+        };
+
+        const defaultPlayers = [
+            // Iconic Players (10 players)
+            { name: "Rana Islam Rabby", category: "ICONIC", basePrice: "100", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/RanaIslamRabby.jpeg", auctionPrice: null, team: null },
+            { name: "Shiab Gazi", category: "ICONIC", basePrice: "100", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/ShiabGazi.jpeg", auctionPrice: null, team: null },
+            { name: "Md. Jihad", category: "ICONIC", basePrice: "100", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdJihad.jpeg", auctionPrice: null, team: null },
+            { name: "Sojib Sheikh", category: "ICONIC", basePrice: "100", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/SojibSheikh.jpeg", auctionPrice: null, team: null },
+            { name: "Dibbojeet Mondal", category: "ICONIC", basePrice: "100", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/DibbojeetMondal.jpeg", auctionPrice: null, team: null },
+            { name: "Hamza Mulla", category: "ICONIC", basePrice: "100", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/HamzaMulla.jpeg", auctionPrice: null, team: null },
+            { name: "Md. Mobarok Hossan Munna", category: "ICONIC", basePrice: "100", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdMobarokHossanMunna.jpeg", auctionPrice: null, team: null },
+            { name: "David Warner", category: "ICONIC", basePrice: "100", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/RanaIslamRabby.jpeg", auctionPrice: null, team: null },
+            { name: "Virat Kohli", category: "ICONIC", basePrice: "100", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/ShiabGazi.jpeg", auctionPrice: null, team: null },
+            { name: "Steve Smith", category: "ICONIC", basePrice: "100", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdJihad.jpeg", auctionPrice: null, team: null },
+
+            // Normal Players (50 players)
+            { name: "Mitchell Starc", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/SojibSheikh.jpeg", auctionPrice: null, team: null },
+            { name: "Glenn Maxwell", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/DibbojeetMondal.jpeg", auctionPrice: null, team: null },
+            { name: "Trent Boult", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/HamzaMulla.jpeg", auctionPrice: null, team: null },
+            { name: "Marcus Stoinis", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdMobarokHossanMunna.jpeg", auctionPrice: null, team: null },
+            { name: "Pat Cummins", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/RanaIslamRabby.jpeg", auctionPrice: null, team: null },
+            { name: "Hardik Pandya", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/ShiabGazi.jpeg", auctionPrice: null, team: null },
+            { name: "Kagiso Rabada", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdJihad.jpeg", auctionPrice: null, team: null },
+            { name: "Quinton de Kock", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/SojibSheikh.jpeg", auctionPrice: null, team: null },
+            { name: "Chris Gayle", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/DibbojeetMondal.jpeg", auctionPrice: null, team: null },
+            { name: "Andre Russell", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/HamzaMulla.jpeg", auctionPrice: null, team: null },
+            { name: "Sunil Narine", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdMobarokHossanMunna.jpeg", auctionPrice: null, team: null },
+            { name: "Kieron Pollard", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/RanaIslamRabby.jpeg", auctionPrice: null, team: null },
+            { name: "Rohit Sharma", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/ShiabGazi.jpeg", auctionPrice: null, team: null },
+            { name: "KL Rahul", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdJihad.jpeg", auctionPrice: null, team: null },
+            { name: "Rishabh Pant", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/SojibSheikh.jpeg", auctionPrice: null, team: null },
+            { name: "Jasprit Bumrah", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/DibbojeetMondal.jpeg", auctionPrice: null, team: null },
+            { name: "Mohammed Shami", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/HamzaMulla.jpeg", auctionPrice: null, team: null },
+            { name: "Yuzvendra Chahal", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdMobarokHossanMunna.jpeg", auctionPrice: null, team: null },
+            { name: "Ravindra Jadeja", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/RanaIslamRabby.jpeg", auctionPrice: null, team: null },
+            { name: "Shikhar Dhawan", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/ShiabGazi.jpeg", auctionPrice: null, team: null },
+            { name: "Bhuvneshwar Kumar", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdJihad.jpeg", auctionPrice: null, team: null },
+            { name: "Shardul Thakur", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/SojibSheikh.jpeg", auctionPrice: null, team: null },
+            { name: "Ishan Kishan", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/DibbojeetMondal.jpeg", auctionPrice: null, team: null },
+            { name: "Shreyas Iyer", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/HamzaMulla.jpeg", auctionPrice: null, team: null },
+            { name: "Sanju Samson", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdMobarokHossanMunna.jpeg", auctionPrice: null, team: null },
+            { name: "Ben Stokes", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/RanaIslamRabby.jpeg", auctionPrice: null, team: null },
+            { name: "Jos Buttler", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/ShiabGazi.jpeg", auctionPrice: null, team: null },
+            { name: "Jonny Bairstow", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdJihad.jpeg", auctionPrice: null, team: null },
+            { name: "Jason Roy", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/SojibSheikh.jpeg", auctionPrice: null, team: null },
+            { name: "Moeen Ali", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/DibbojeetMondal.jpeg", auctionPrice: null, team: null },
+            { name: "Sam Curran", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/HamzaMulla.jpeg", auctionPrice: null, team: null },
+            { name: "Liam Livingstone", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdMobarokHossanMunna.jpeg", auctionPrice: null, team: null },
+            { name: "Adil Rashid", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/RanaIslamRabby.jpeg", auctionPrice: null, team: null },
+            { name: "Rashid Khan", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/ShiabGazi.jpeg", auctionPrice: null, team: null },
+            { name: "Mohammad Nabi", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdJihad.jpeg", auctionPrice: null, team: null },
+            { name: "Mujeeb Ur Rahman", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/SojibSheikh.jpeg", auctionPrice: null, team: null },
+            { name: "Babar Azam", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/DibbojeetMondal.jpeg", auctionPrice: null, team: null },
+            { name: "Shaheen Afridi", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/HamzaMulla.jpeg", auctionPrice: null, team: null },
+            { name: "Shadab Khan", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdMobarokHossanMunna.jpeg", auctionPrice: null, team: null },
+            { name: "Haris Rauf", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/RanaIslamRabby.jpeg", auctionPrice: null, team: null },
+            { name: "Kane Williamson", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/ShiabGazi.jpeg", auctionPrice: null, team: null },
+            { name: "Tim Southee", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdJihad.jpeg", auctionPrice: null, team: null },
+            { name: "Martin Guptill", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/SojibSheikh.jpeg", auctionPrice: null, team: null },
+            { name: "Mitchell Santner", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/DibbojeetMondal.jpeg", auctionPrice: null, team: null },
+            { name: "AB de Villiers", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/HamzaMulla.jpeg", auctionPrice: null, team: null },
+            { name: "Faf du Plessis", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdMobarokHossanMunna.jpeg", auctionPrice: null, team: null },
+            { name: "Imran Tahir", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/RanaIslamRabby.jpeg", auctionPrice: null, team: null },
+            { name: "Dale Steyn", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/ShiabGazi.jpeg", auctionPrice: null, team: null },
+            { name: "Lungi Ngidi", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/MdJihad.jpeg", auctionPrice: null, team: null },
+            { name: "Aiden Markram", category: "NORMAL", basePrice: "50", imageURL: "https://munnacodsit.xyz/Cricket-Auction/im/SojibSheikh.jpeg", auctionPrice: null, team: null },
+        ];
+        
+        function init() {
+            loadFromStorage();
+            recalculateTeamBudgets();
+            
+            // Auto-randomize iconic players on first load if in ICONIC category
+            if (currentCategory === 'ICONIC') {
+                randomizeIconicPlayersOnce();
+            }
+            
+            displayCurrentPlayer();
+        }
+
+        function loadFromStorage() {
+            const storedPlayers = localStorage.getItem('cricketPlayers');
+            if (storedPlayers) {
+                const stored = JSON.parse(storedPlayers);
+                // Check if old categories (A, B, C) exist - if yes, reset to new data
+                const hasOldCategories = stored.some(p => ['A', 'B', 'C'].includes(p.category));
+                if (hasOldCategories) {
+                    // Reset to new default players with ICONIC and NORMAL categories
+                    allPlayers = JSON.parse(JSON.stringify(defaultPlayers));
+                    saveToStorage();
+                    console.log('Old data reset - New categories loaded');
+                } else {
+                    allPlayers = stored;
+                }
+            } else {
+                allPlayers = JSON.parse(JSON.stringify(defaultPlayers));
+                saveToStorage();
+            }
+        }
+
+        function saveToStorage() {
+            localStorage.setItem('cricketPlayers', JSON.stringify(allPlayers));
+        }
+
+        function getCurrentCategoryPlayers() {
+            // Get all players of current category
+            const categoryPlayers = allPlayers.filter(player => player.category === currentCategory);
+            
+            // Sort: SOLD players first, then UNSOLD players
+            return categoryPlayers.sort((a, b) => {
+                if (a.auctionPrice && !b.auctionPrice) return -1; // a is sold, b is unsold - a comes first
+                if (!a.auctionPrice && b.auctionPrice) return 1;  // a is unsold, b is sold - b comes first
+                return 0; // both same status, keep original order
+            });
+        }
+
+        function changeCategory(newCategory) {
+            currentCategory = newCategory;
+            currentPlayerIndex = 0;
+            document.querySelectorAll('.category-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`.category-tab.${newCategory.toLowerCase()}`).classList.add('active');
+            
+            // Auto-randomize iconic players when switching to ICONIC category
+            if (newCategory === 'ICONIC') {
+                randomizeIconicPlayersOnce();
+            }
+            
+            displayCurrentPlayer();
+        }
+
+        function displayCurrentPlayer() {
+            const screen = document.getElementById('playerScreen');
+            const currentPlayers = getCurrentCategoryPlayers();
+            
+            if (currentPlayers.length === 0) {
+                screen.innerHTML = '<div class="no-players">No players in this category.</div>';
                 return;
             }
-
-            // Player move (X)
-            gameState.board[index] = 'X';
-            gameState.playerMoved = true;
-            updateCell(index, 'X');
-
-            if (checkWinner()) {
-                return;
+            
+            const player = currentPlayers[currentPlayerIndex];
+            const badgeClass = `badge-${player.category.toLowerCase()}`;
+            
+            let teamSelector = '';
+            let soldLabel = '';
+            
+            if (player.auctionPrice) {
+                // Player is SOLD - show SOLD label
+                soldLabel = `<div style="font-size: 1.8em; font-weight: bold; color: #059669; margin: 12px 0; padding: 10px; background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border-radius: 15px; box-shadow: 0 5px 15px rgba(5, 150, 105, 0.3);">✅ SOLD</div>`;
+            } else {
+                // Player is UNSOLD - show team selector
+                teamSelector = `<div class="team-selector">${teams.map(team => `<button class="team-btn ${player.team === team ? 'selected' : ''}" onclick="selectTeam('${team}')">${team}</button>`).join('')}</div>`;
             }
-
-            if (checkDraw()) {
-                return;
-            }
-
-            // AI move after delay
+            
+            const categoryText = player.category === 'ICONIC' ? 'Iconic Player' : 'Normal Player';
+            
+            const priceDisplay = player.auctionPrice 
+                ? `<div class="price-info-box"><div class="base-price-display">💰 BASE PRICE: ${player.basePrice}</div><div class="sold-price-display">✅ SOLD PRICE: ${player.auctionPrice}</div>${player.team ? `<div class="base-price-display" style="color: #9333ea; margin-top: 10px;">🏆 Team: ${player.team}</div>` : ''}</div>`
+                : `<div class="price-info-box"><div class="base-price-display">💰 BASE PRICE: ${player.basePrice}</div><div class="sold-price-display" style="color: #ea580c;">UNSOLD</div></div>`;
+            
+            const imageHTML = player.imageURL 
+                ? `<img src="${player.imageURL}" alt="${player.name}" class="player-image-large">`
+                : `<div class="player-image-large" style="background-color: #f3f4f6; border: 8px solid #9ca3af; display: flex; align-items: center; justify-content: center; font-size: 1.5em; color: #6b7280;">No Image</div>`;
+            
+            screen.innerHTML = `${imageHTML}<div class="player-name-large">${player.name}</div>${soldLabel}<div class="player-category-badge ${badgeClass}">${categoryText}</div>${priceDisplay}${teamSelector}<div class="navigation-buttons"><button class="nav-btn" onclick="previousPlayer()" ${currentPlayerIndex === 0 ? 'disabled' : ''}>⬅️ Previous</button><button class="nav-btn" onclick="nextPlayer()" ${currentPlayerIndex === currentPlayers.length - 1 ? 'disabled' : ''}>Next ➡️</button></div><div class="player-counter">${currentPlayerIndex + 1} / ${currentPlayers.length}</div>`;
+            
+            // Set price input to current player's base price (not previous price)
             setTimeout(() => {
-                makeAIMove();
-                gameState.playerMoved = false;
+                const newPriceInput = document.getElementById('auctionPriceInput');
+                if (newPriceInput && !player.auctionPrice) {
+                    newPriceInput.value = player.basePrice;
+                } else if (newPriceInput && player.auctionPrice) {
+                    newPriceInput.value = '';
+                }
+            }, 0);
+        }
+
+        function nextPlayer() {
+            const currentPlayers = getCurrentCategoryPlayers();
+            if (currentPlayerIndex < currentPlayers.length - 1) {
+                currentPlayerIndex++;
+                displayCurrentPlayer();
+            }
+        }
+
+        function previousPlayer() {
+            if (currentPlayerIndex > 0) {
+                currentPlayerIndex--;
+                displayCurrentPlayer();
+            }
+        }
+
+        function selectTeam(teamName) {
+            const currentPlayers = getCurrentCategoryPlayers();
+            const player = currentPlayers[currentPlayerIndex];
+            const playerIndexInAll = allPlayers.findIndex(p => p.name === player.name && p.category === player.category);
+            
+            // Store current price before making changes
+            const priceInput = document.getElementById('auctionPriceInput');
+            const currentPrice = priceInput ? priceInput.value : null;
+            
+            if (playerIndexInAll !== -1) {
+                if (allPlayers[playerIndexInAll].team === teamName) {
+                    allPlayers[playerIndexInAll].team = null;
+                } else {
+                    allPlayers[playerIndexInAll].team = teamName;
+                }
+                saveToStorage();
+                displayCurrentPlayer();
+                
+                // Restore the price after display update if there was a price
+                setTimeout(() => {
+                    const newPriceInput = document.getElementById('auctionPriceInput');
+                    if (newPriceInput && currentPrice && currentPrice.trim() !== '') {
+                        newPriceInput.value = currentPrice;
+                    }
+                }, 0);
+            }
+        }
+
+        function createFireworks() {
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ff8800', '#ff0088'];
+            const welcomeContent = document.querySelector('.welcome-content');
+            
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const firework = document.createElement('div');
+                    firework.className = 'firework';
+                    firework.style.left = Math.random() * 100 + '%';
+                    firework.style.top = Math.random() * 100 + '%';
+                    firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    
+                    const tx = (Math.random() - 0.5) * 400;
+                    const ty = (Math.random() - 0.5) * 400;
+                    firework.style.setProperty('--tx', tx + 'px');
+                    firework.style.setProperty('--ty', ty + 'px');
+                    
+                    welcomeContent.appendChild(firework);
+                    
+                    setTimeout(() => firework.remove(), 1000);
+                }, i * 40);
+            }
+        }
+
+        function showWelcomePage(player) {
+            const overlay = document.getElementById('welcomePageOverlay');
+            const playerImageContainer = document.getElementById('welcomePlayerImageContainer');
+            const messageDiv = document.getElementById('welcomeMessage');
+            
+            playerImageContainer.innerHTML = '';
+            
+            if (player.imageURL) {
+                const img = document.createElement('img');
+                img.src = player.imageURL;
+                img.className = 'welcome-player-img';
+                img.alt = player.name;
+                playerImageContainer.appendChild(img);
+            } else {
+                const placeholder = document.createElement('div');
+                placeholder.className = 'welcome-player-img';
+                placeholder.style.backgroundColor = '#f3f4f6';
+                placeholder.style.display = 'flex';
+                placeholder.style.alignItems = 'center';
+                placeholder.style.justifyContent = 'center';
+                placeholder.style.fontSize = '2em';
+                placeholder.style.color = '#6b7280';
+                placeholder.textContent = 'No Image';
+                playerImageContainer.appendChild(placeholder);
+            }
+            
+            const message = teamWelcomeMessages[player.team].replace('{playerName}', player.name);
+            const lines = message.split('\n');
+            
+            messageDiv.innerHTML = `
+                <div class="welcome-team-name">From ${player.team}</div>
+                <div class="welcome-player-name">${player.name}</div>
+                ${lines.map(line => `<div class="welcome-text">${line}</div>`).join('')}
+                <div class="welcome-signature">— Management, ${player.team}</div>
+            `;
+            
+            overlay.style.display = 'flex';
+            createFireworks();
+        }
+
+        function closeWelcomePage() {
+            document.getElementById('welcomePageOverlay').style.display = 'none';
+        }
+
+        function incrementPrice() {
+            const currentPlayers = getCurrentCategoryPlayers();
+            if (currentPlayers.length === 0) {
+                alert('⚠️ No players!');
+                return;
+            }
+            
+            const player = currentPlayers[currentPlayerIndex];
+            const priceInput = document.getElementById('auctionPriceInput');
+            
+            let currentPrice = parseInt(priceInput.value) || parseInt(player.basePrice);
+            let increment = 0;
+            
+            // Price increment algorithm:
+            // 20-100: increase by 10
+            // 100-500: increase by 20
+            // 500-800: increase by 50
+            
+            if (currentPrice >= 20 && currentPrice < 100) {
+                increment = 10;
+            } else if (currentPrice >= 100 && currentPrice < 500) {
+                increment = 20;
+            } else if (currentPrice >= 500 && currentPrice <= 800) {
+                increment = 50;
+            } else if (currentPrice < 20) {
+                // If less than 20, increment by 10 to reach 20
+                increment = 10;
+            } else {
+                // After 800, keep incrementing by 50
+                increment = 50;
+            }
+            
+            const newPrice = currentPrice + increment;
+            priceInput.value = newPrice;
+            
+            // Don't reset to base price on display
+            priceInput.setAttribute('data-user-modified', 'true');
+        }
+
+        function decrementPrice() {
+            const currentPlayers = getCurrentCategoryPlayers();
+            if (currentPlayers.length === 0) {
+                alert('⚠️ No players!');
+                return;
+            }
+            
+            const player = currentPlayers[currentPlayerIndex];
+            const priceInput = document.getElementById('auctionPriceInput');
+            
+            let currentPrice = parseInt(priceInput.value) || parseInt(player.basePrice);
+            let decrement = 0;
+            
+            // Price decrement algorithm (reverse of increment):
+            // 21-100: decrease by 10
+            // 101-500: decrease by 20
+            // 501-800+: decrease by 50
+            
+            if (currentPrice > 500) {
+                decrement = 50;
+            } else if (currentPrice > 100 && currentPrice <= 500) {
+                decrement = 20;
+            } else if (currentPrice > 20 && currentPrice <= 100) {
+                decrement = 10;
+            } else {
+                // Cannot go below base price
+                alert('⚠️ Cannot go below BASE PRICE!');
+                return;
+            }
+            
+            const newPrice = currentPrice - decrement;
+            
+            // Make sure we don't go below base price
+            const basePrice = parseInt(player.basePrice);
+            if (newPrice < basePrice) {
+                alert('⚠️ Cannot go below BASE PRICE!');
+                priceInput.value = basePrice;
+                return;
+            }
+            
+            priceInput.value = newPrice;
+            
+            // Don't reset to base price on display
+            priceInput.setAttribute('data-user-modified', 'true');
+        }
+
+        function setAuctionPrice() {
+            const currentPlayers = getCurrentCategoryPlayers();
+            if (currentPlayers.length === 0) {
+                alert('⚠️ No players!');
+                return;
+            }
+            const priceInput = document.getElementById('auctionPriceInput');
+            const price = priceInput.value.trim();
+            if (!price || isNaN(price) || parseInt(price) <= 0) {
+                alert('⚠️ Enter correct price!');
+                return;
+            }
+            const player = currentPlayers[currentPlayerIndex];
+            
+            // Check if player already sold
+            if (player.auctionPrice) {
+                alert('⚠️ This player is already sold!');
+                return;
+            }
+            
+            if (!player.team) {
+                alert('⚠️ Select a team first!');
+                // Keep the current price in input - don't clear it
+                return;
+            }
+            
+            // Check if team has enough budget
+            const priceInt = parseInt(price);
+            if (teamBudgets[player.team] < priceInt) {
+                alert(`⚠️ ${player.team} does not have enough budget!\nAvailable: ${teamBudgets[player.team]}\nRequired: ${priceInt}`);
+                return;
+            }
+            
+            const playerIndexInAll = allPlayers.findIndex(p => p.name === player.name && p.category === player.category);
+            if (playerIndexInAll !== -1) {
+                allPlayers[playerIndexInAll].auctionPrice = price;
+                saveToStorage();
+                
+                // Recalculate budgets
+                recalculateTeamBudgets();
+                
+                showWelcomePage(allPlayers[playerIndexInAll]);
+                
+                displayCurrentPlayer();
+                priceInput.value = '';
+            }
+        }
+
+        function showAllCongratulations() {
+            const soldPlayers = allPlayers.filter(p => p.auctionPrice && p.team);
+            
+            if (soldPlayers.length === 0) {
+                alert('⚠️ No players sold yet!');
+                return;
+            }
+            
+            let currentIndex = 0;
+            
+            function showNextCongratulation() {
+                if (currentIndex >= soldPlayers.length) {
+                    alert('✅ All congratulations shown!');
+                    return;
+                }
+                
+                const player = soldPlayers[currentIndex];
+                showWelcomePage(player);
+                
+                // Override close button to show next player
+                const closeBtn = document.querySelector('.close-welcome-btn');
+                if (closeBtn) {
+                    closeBtn.onclick = function() {
+                        closeWelcomePage();
+                        currentIndex++;
+                        if (currentIndex < soldPlayers.length) {
+                            setTimeout(() => showNextCongratulation(), 300);
+                        }
+                    };
+                    closeBtn.textContent = currentIndex < soldPlayers.length - 1 ? `➡️ Next (${currentIndex + 1}/${soldPlayers.length})` : `✖ Finish (${soldPlayers.length}/${soldPlayers.length})`;
+                }
+            }
+            
+            showNextCongratulation();
+        }
+
+        function showResultSheet() {
+            const resultSheetOverlay = document.getElementById('resultSheetOverlay');
+            currentView = 'all';
+            currentTeam = 'Dumuria Kings';
+            
+            document.querySelectorAll('.view-tab').forEach(tab => {
+                tab.classList.remove('active-view');
+            });
+            document.querySelectorAll('.view-tab')[0].classList.add('active-view');
+            
+            document.getElementById('teamTabsContainer').style.display = 'none';
+            document.getElementById('downloadBtn').textContent = '📥 Download Complete Result';
+            document.getElementById('downloadBtn').onclick = downloadAllResult;
+            
+            showAllResult();
+            resultSheetOverlay.style.display = 'flex';
+        }
+
+        function changeView(viewType) {
+            currentView = viewType;
+            
+            document.querySelectorAll('.view-tab').forEach(tab => {
+                tab.classList.remove('active-view');
+            });
+            event.target.classList.add('active-view');
+            
+            if (viewType === 'all') {
+                document.getElementById('teamTabsContainer').style.display = 'none';
+                document.getElementById('downloadBtn').textContent = '📥 Download Complete Result';
+                document.getElementById('downloadBtn').onclick = downloadAllResult;
+                showAllResult();
+            } else {
+                document.getElementById('teamTabsContainer').style.display = 'block';
+                document.getElementById('downloadBtn').textContent = '📥 Download Team Image';
+                document.getElementById('downloadBtn').onclick = downloadTeamImage;
+                
+                document.querySelectorAll('.team-tab').forEach(tab => {
+                    tab.classList.remove('active-team');
+                });
+                document.querySelectorAll('.team-tab')[0].classList.add('active-team');
+                
+                currentTeam = 'Dumuria Kings';
+                showTeamPlayers('Dumuria Kings');
+            }
+        }
+
+        function showAllResult() {
+            const resultContainer = document.getElementById('resultContainer');
+            const playersToShow = allPlayers;
+            
+            if (playersToShow.length === 0) {
+                resultContainer.innerHTML = '<p style="text-align: center; color: #dc2626; font-weight: bold;">No player data available.</p>';
+            } else {
+                let tableHTML = '<table><thead><tr><th>Name</th><th>Category</th><th>BASE PRICE</th><th>SOLD PRICE</th><th>Team</th><th>Status</th></tr></thead><tbody>';
+                playersToShow.forEach(player => {
+                    const status = player.auctionPrice ? 'SOLD' : 'UNSOLD';
+                    const priceDisplay = player.auctionPrice ? player.auctionPrice : '---';
+                    const teamDisplay = player.team ? player.team : '---';
+                    const statusColor = player.auctionPrice ? '#059669' : '#ea580c';
+                    const categoryText = player.category === 'ICONIC' ? 'Iconic' : 'Normal';
+                    tableHTML += `<tr><td>${player.name}</td><td>${categoryText}</td><td>${player.basePrice}</td><td>${priceDisplay}</td><td style="font-weight: bold; color: #9333ea;">${teamDisplay}</td><td style="font-weight: bold; color: ${statusColor};">${status}</td></tr>`;
+                });
+                tableHTML += '</tbody></table>';
+                resultContainer.innerHTML = tableHTML;
+            }
+        }
+
+        function showTeamPlayers(teamName) {
+            currentTeam = teamName;
+            
+            document.querySelectorAll('.team-tab').forEach(tab => {
+                tab.classList.remove('active-team');
+            });
+            event.target.classList.add('active-team');
+            
+            const resultContainer = document.getElementById('resultContainer');
+            const teamPlayers = allPlayers.filter(p => p.team === teamName && p.auctionPrice);
+            
+            if (teamPlayers.length === 0) {
+                resultContainer.innerHTML = '<div class="no-team-players">No players in this team yet.</div>';
+                return;
+            }
+            
+            let html = '<div class="team-players-grid">';
+            teamPlayers.forEach(player => {
+                const imageHTML = player.imageURL 
+                    ? `<img src="${player.imageURL}" alt="${player.name}" class="player-card-image">`
+                    : `<div class="player-card-image" style="background-color: #f3f4f6; display: flex; align-items: center; justify-content: center; font-size: 1em; color: #6b7280;">No Image</div>`;
+                
+                html += `
+                    <div class="player-card">
+                        ${imageHTML}
+                        <div class="player-card-name">${player.name}</div>
+                        <div class="player-card-price">💰 ${player.auctionPrice}</div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            
+            resultContainer.innerHTML = html;
+        }
+
+        function hideResultSheet(event) {
+            if (event && event.target.id !== 'resultSheetOverlay') {
+                return;
+            }
+            document.getElementById('resultSheetOverlay').style.display = 'none';
+        }
+
+        function resetData() {
+            const confirmReset = confirm("Are you sure you want to delete all player data (including sold prices)? This action cannot be undone.");
+            if (confirmReset) {
+                localStorage.removeItem('cricketPlayers');
+                allPlayers = JSON.parse(JSON.stringify(defaultPlayers));
+                saveToStorage();
+                currentPlayerIndex = 0;
+                recalculateTeamBudgets();
+                displayCurrentPlayer();
+                alert("✅ All data has been successfully deleted and default data has been loaded.");
+            }
+        }
+
+        function startSecondRound() {
+            // Count unsold players
+            const unsoldCount = allPlayers.filter(p => !p.auctionPrice).length;
+            
+            if (unsoldCount === 0) {
+                alert("⚠️ No UNSOLD players! Everyone has been sold.");
+                return;
+            }
+            
+            // First confirmation
+            const confirm1 = confirm(`⚠️ WARNING - CONFIRMATION 1/4\n\nAre you sure you want to start the 2nd round?\n\n${unsoldCount} UNSOLD players will have BASE PRICE set to 20 and their team selection will be reset.\n\nClick OK to continue or Cancel to stop.`);
+            if (!confirm1) {
+                alert("❌ 2nd round cancelled.");
+                return;
+            }
+            
+            // Second confirmation
+            const confirm2 = confirm(`⚠️ WARNING - CONFIRMATION 2/4\n\nThis action will reset BASE PRICE to 20 for all UNSOLD players!\n\nAre you absolutely sure?\n\nClick OK to continue or Cancel to stop.`);
+            if (!confirm2) {
+                alert("❌ 2nd round cancelled.");
+                return;
+            }
+            
+            // Third confirmation
+            const confirm3 = confirm(`⚠️ WARNING - CONFIRMATION 3/4\n\nLast chance to reconsider!\n\n${unsoldCount} UNSOLD players will be reset.\n\nClick OK to continue or Cancel to stop.`);
+            if (!confirm3) {
+                alert("❌ 2nd round cancelled.");
+                return;
+            }
+            
+            // Fourth and final confirmation
+            const confirm4 = confirm(`⚠️ FINAL WARNING - CONFIRMATION 4/4\n\nThis is your LAST confirmation!\n\nAfter this, BASE PRICE will be changed to 20 for ${unsoldCount} UNSOLD players.\n\nClick OK to PROCEED or Cancel to STOP.`);
+            if (!confirm4) {
+                alert("❌ 2nd round cancelled. No changes were made.");
+                return;
+            }
+            
+            // All 4 confirmations passed - proceed with changes
+            allPlayers.forEach(player => {
+                if (!player.auctionPrice) {
+                    player.basePrice = "20";
+                    player.team = null; // Reset team selection for unsold players
+                }
+            });
+            saveToStorage();
+            currentPlayerIndex = 0;
+            displayCurrentPlayer();
+            alert(`✅ 2nd round has started!\n\n${unsoldCount} UNSOLD players now have BASE PRICE of 20.`);
+        }
+
+        function downloadAllResult() {
+            const playersToShow = allPlayers;
+            const playersPerPage = 25;
+            const totalPages = Math.ceil(playersToShow.length / playersPerPage);
+            const previewContainer = document.getElementById('pdfPreview');
+            previewContainer.innerHTML = '';
+            previewContainer.style.display = 'block';
+            
+            for (let pageNum = 0; pageNum < totalPages; pageNum++) {
+                const startIdx = pageNum * playersPerPage;
+                const endIdx = Math.min(startIdx + playersPerPage, playersToShow.length);
+                const pagePlayers = playersToShow.slice(startIdx, endIdx);
+                const pageDiv = document.createElement('div');
+                pageDiv.className = 'pdf-page';
+                pageDiv.innerHTML = `<h1>CIVIL PREMIER LEAGUE</h1><table><thead><tr><th>Name</th><th>Category</th><th>BASE PRICE</th><th>SOLD PRICE</th><th>Team</th><th>Status</th></tr></thead><tbody>${pagePlayers.map(player => {
+                    const status = player.auctionPrice ? 'SOLD' : 'UNSOLD';
+                    const priceDisplay = player.auctionPrice ? player.auctionPrice : '---';
+                    const teamDisplay = player.team ? player.team : '---';
+                    const statusClass = player.auctionPrice ? 'sold' : 'unsold';
+                    const categoryText = player.category === 'ICONIC' ? 'Iconic' : 'Normal';
+                    return `<tr><td>${player.name}</td><td>${categoryText}</td><td>${player.basePrice}</td><td>${priceDisplay}</td><td>${teamDisplay}</td><td class="${statusClass}">${status}</td></tr>`;
+                }).join('')}</tbody></table><div class="pdf-page-number">Page ${pageNum + 1}/${totalPages}</div>`;
+                previewContainer.appendChild(pageDiv);
+            }
+            
+            setTimeout(function() {
+                processPages(0, previewContainer.querySelectorAll('.pdf-page'));
+            }, 100);
+        }
+        
+        function processPages(index, pages) {
+            if (index >= pages.length) {
+                const previewContainer = document.getElementById('pdfPreview');
+                previewContainer.style.display = 'none';
+                previewContainer.innerHTML = '';
+                alert(`✅ Total ${pages.length} page images downloaded!`);
+                return;
+            }
+            
+            html2canvas(pages[index], {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: '#ffffff',
+                width: 794,
+                height: 1123
+            }).then(function(canvas) {
+                const link = document.createElement('a');
+                link.download = `Complete-Result-Page-${index + 1}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                
+                setTimeout(function() {
+                    processPages(index + 1, pages);
+                }, 500);
+            });
+        }
+
+        async function downloadTeamImage() {
+            const teamPlayers = allPlayers.filter(p => p.team === currentTeam && p.auctionPrice);
+            
+            if (teamPlayers.length === 0) {
+                alert('⚠️ No players in this team!');
+                return;
+            }
+            
+            const previewContainer = document.getElementById('teamImagePreview');
+            previewContainer.innerHTML = '';
+            previewContainer.style.display = 'block';
+            previewContainer.style.position = 'fixed';
+            previewContainer.style.left = '0';
+            previewContainer.style.top = '0';
+            
+            const pageDiv = document.createElement('div');
+            pageDiv.style.width = '1000px';
+            pageDiv.style.minHeight = 'auto';
+            pageDiv.style.padding = '40px';
+            pageDiv.style.background = 'white';
+            pageDiv.style.fontFamily = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+            
+            let html = `
+                <div style="text-align: center; margin-bottom: 30px; padding: 25px; background: linear-gradient(135deg, #9333ea 0%, #7e22ce 100%); border-radius: 15px; box-shadow: 0 10px 30px rgba(147, 51, 234, 0.3);">
+                    <h1 style="color: white; font-size: 42px; margin: 0 0 15px 0; font-weight: bold;">🏆 ${currentTeam}</h1>
+                    <div style="color: white; font-size: 20px; font-weight: bold; margin-bottom: 8px;">Player List - 2025</div>
+                    <div style="color: white; font-size: 18px; opacity: 0.9;">Total Players: ${teamPlayers.length}</div>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 30px;">
+            `;
+            
+            const imagePromises = teamPlayers.map(player => {
+                return new Promise((resolve) => {
+                    if (player.imageURL) {
+                        const img = new Image();
+                        img.crossOrigin = 'anonymous';
+                        img.onload = () => resolve({ player, img });
+                        img.onerror = () => resolve({ player, img: null });
+                        img.src = player.imageURL;
+                    } else {
+                        resolve({ player, img: null });
+                    }
+                });
+            });
+            
+            const loadedImages = await Promise.all(imagePromises);
+            
+            loadedImages.forEach(({ player, img }) => {
+                let imageHTML;
+                if (img) {
+                    imageHTML = `<img src="${player.imageURL}" crossorigin="anonymous" alt="${player.name}" style="width: 140px; height: 140px; border-radius: 50%; object-fit: cover; margin: 0 auto 15px auto; display: block; border: 4px solid #9333ea; box-shadow: 0 5px 15px rgba(147, 51, 234, 0.3);">`;
+                } else {
+                    imageHTML = `<div style="width: 140px; height: 140px; border-radius: 50%; background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%); display: flex; align-items: center; justify-content: center; margin: 0 auto 15px auto; border: 4px solid #9ca3af; font-size: 16px; color: #6b7280; font-weight: bold;">No Image</div>`;
+                }
+                
+                html += `
+                    <div style="text-align: center; padding: 20px; border: 3px solid #9333ea; border-radius: 12px; background: white; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+                        ${imageHTML}
+                        <div style="font-size: 16px; font-weight: bold; color: #1f2937; margin-bottom: 8px; line-height: 1.4;">${player.name}</div>
+                        <div style="font-size: 18px; font-weight: bold; color: #059669; padding: 8px 12px; background: #d1fae5; border-radius: 8px; display: inline-block;">💰 ${player.auctionPrice}</div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            html += `
+                <div style="text-align: center; margin-top: 35px; padding: 18px; background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%); border-radius: 10px; border: 2px solid #d1d5db;">
+                    <div style="font-size: 15px; color: #1f2937; font-weight: 600; line-height: 1.6;">
+                        CIVIL PREMIER LEAGUE
+                    </div>
+                </div>
+            `;
+            pageDiv.innerHTML = html;
+            previewContainer.appendChild(pageDiv);
+            
+            setTimeout(function() {
+                html2canvas(pageDiv, {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: '#ffffff',
+                    width: 1000,
+                    logging: false,
+                    imageTimeout: 0
+                }).then(function(canvas) {
+                    const link = document.createElement('a');
+                    link.download = `${currentTeam}-Player-List-${Date.now()}.png`;
+                    link.href = canvas.toDataURL('image/png', 1.0);
+                    link.click();
+                    
+                    previewContainer.style.display = 'none';
+                    previewContainer.innerHTML = '';
+                    alert(`✅ ${currentTeam} player list downloaded successfully!`);
+                }).catch(function(error) {
+                    console.error('Error generating image:', error);
+                    previewContainer.style.display = 'none';
+                    previewContainer.innerHTML = '';
+                    alert('⚠️ Error creating image. Please try again.');
+                });
             }, 500);
         }
 
-        function makeAIMove() {
-            if (!gameState.gameActive) return;
+        window.onload = init;
 
-            // Strategic AI that tries to prevent player from winning
-            let bestMove = getBestMove();
-            
-            if (bestMove !== -1) {
-                gameState.board[bestMove] = 'O';
-                updateCell(bestMove, 'O');
-                
-                if (checkWinner()) {
-                    return;
-                }
-                
-                if (checkDraw()) {
-                    return;
-                }
-                
-                document.getElementById('game-status').textContent = 'Your Turn!';
+        // Add keyboard shortcut: Ctrl+M to decrease price, Ctrl+I to increase price
+        // Ctrl+J to jump to player (in Normal category)
+        document.addEventListener('keydown', function(event) {
+            // Check if Ctrl+M is pressed (Ctrl key + M key)
+            if ((event.ctrlKey || event.metaKey) && event.key === 'm') {
+                event.preventDefault(); // Prevent default browser behavior
+                decrementPrice();
             }
-        }
-
-        function getBestMove() {
-            // First, check if AI can win
-            for (let i = 0; i < 9; i++) {
-                if (gameState.board[i] === '') {
-                    gameState.board[i] = 'O';
-                    if (isWinningMove('O')) {
-                        gameState.board[i] = '';
-                        return i;
+            
+            // Check if Ctrl+I is pressed (Ctrl key + I key) for increment
+            if ((event.ctrlKey || event.metaKey) && event.key === 'i') {
+                event.preventDefault(); // Prevent default browser behavior
+                incrementPrice();
+            }
+            
+            // Check if Ctrl+J is pressed for jump to player (only in NORMAL category)
+            if ((event.ctrlKey || event.metaKey) && event.key === 'j') {
+                if (currentCategory === 'NORMAL') {
+                    event.preventDefault();
+                    const playerNum = prompt('Enter player number (1-50):');
+                    if (playerNum) {
+                        const num = parseInt(playerNum);
+                        const normalPlayers = getCurrentCategoryPlayers();
+                        
+                        if (!isNaN(num) && num >= 1 && num <= normalPlayers.length) {
+                            currentPlayerIndex = num - 1;
+                            displayCurrentPlayer();
+                        } else {
+                            alert(`⚠️ Please enter a number between 1 and ${normalPlayers.length}!`);
+                        }
                     }
-                    gameState.board[i] = '';
                 }
             }
-
-            // Then, block player from winning
-            for (let i = 0; i < 9; i++) {
-                if (gameState.board[i] === '') {
-                    gameState.board[i] = 'X';
-                    if (isWinningMove('X')) {
-                        gameState.board[i] = '';
-                        return i;
-                    }
-                    gameState.board[i] = '';
-                }
-            }
-
-            // Take center if available
-            if (gameState.board[4] === '') {
-                return 4;
-            }
-
-            // Take corners
-            const corners = [0, 2, 6, 8];
-            for (let corner of corners) {
-                if (gameState.board[corner] === '') {
-                    return corner;
-                }
-            }
-
-            // Take any available space
-            for (let i = 0; i < 9; i++) {
-                if (gameState.board[i] === '') {
-                    return i;
-                }
-            }
-
-            return -1;
-        }
-
-        function isWinningMove(player) {
-            const winPatterns = [
-                [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
-                [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
-                [0, 4, 8], [2, 4, 6] // Diagonals
-            ];
-
-            return winPatterns.some(pattern => 
-                pattern.every(index => gameState.board[index] === player)
-            );
-        }
-
-        function updateCell(index, player) {
-            const cell = document.querySelector(`[data-index="${index}"]`);
-            cell.textContent = player;
-            cell.classList.add(player.toLowerCase());
-        }
-
-        function checkWinner() {
-            if (isWinningMove('X')) {
-                gameState.gameActive = false;
-                document.getElementById('game-status').textContent = '🎉 You Won! +500 Points!';
-                userData.points += 500;
-                userData.gamesWon += 1;
-                userData.gamesPlayed += 1;
-                saveUserData();
-                setTimeout(resetGame, 1500);
-                return true;
-            }
-
-            if (isWinningMove('O')) {
-                gameState.gameActive = false;
-                document.getElementById('game-status').textContent = '😔 AI Wins! Try Again!';
-                userData.gamesPlayed += 1;
-                saveUserData();
-                setTimeout(resetGame, 1500);
-                return true;
-            }
-
-            return false;
-        }
-
-        function checkDraw() {
-            if (gameState.board.every(cell => cell !== '')) {
-                gameState.gameActive = false;
-                document.getElementById('game-status').textContent = '🤝 It\'s a Draw!';
-                userData.gamesPlayed += 1;
-                saveUserData();
-                setTimeout(resetGame, 1500);
-                return true;
-            }
-            return false;
-        }
-
-        function resetGame() {
-            initGame();
-        }
-
-        // Navigation
-        function showSection(section) {
-            // Hide all sections
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-
-            // Show selected section
-            document.getElementById(section + '-section').classList.add('active');
-            event.currentTarget.classList.add('active');
-        }
-
-        // Shop Functions
-        function purchaseCoins(amount, tonAmount) {
-            const confirmation = confirm(`Purchase ${amount} coins for ${tonAmount} TON?`);
-            if (confirmation) {
-                // Redirect to TON payment
-                const tonAddress = 'UQDpNcFB_W9VsD-loC8c1ShuE0xFEzjkwzKiF2fGBfkZ6FJJ';
-                const paymentUrl = `https://ton.org/payment?to=${tonAddress}&amount=${tonAmount}&comment=coins_${amount}`;
-                
-                // In real implementation, you would verify payment before adding coins
-                alert(`Redirecting to TON payment... After successful payment, ${amount} coins will be added to your account.`);
-                
-                // Simulate successful payment (remove in production)
-                setTimeout(() => {
-                    userData.balance += amount;
-                    saveUserData();
-                    alert(`✅ Payment successful! ${amount} coins added to your account.`);
-                }, 2000);
-            }
-        }
-
-        // Task Functions
-        function completeTask(taskType) {
-            if (userData.completedTasks.includes(taskType)) {
-                alert('Task already completed!');
-                return;
-            }
-
-            let points = 0;
-            let url = '';
-
-            switch(taskType) {
-                case 'youtube':
-                    points = 100;
-                    url = 'https://youtube.com/@yourchannel';
-                    break;
-                case 'telegram':
-                    points = 150;
-                    url = 'https://t.me/yourchannel';
-                    break;
-                case 'telegram-group':
-                    points = 200;
-                    url = 'https://t.me/yourgroup';
-                    break;
-                case 'bot':
-                    points = 75;
-                    url = 'https://t.me/yourbot';
-                    break;
-            }
-
-            // Open the social media link
-            window.open(url, '_blank');
-
-            // Add points and mark task as completed
-            setTimeout(() => {
-                const completed = confirm('Did you complete the task? Click OK to receive your points.');
-                if (completed) {
-                    userData.points += points;
-                    userData.completedTasks.push(taskType);
-                    saveUserData();
-                    alert(`✅ Task completed! +${points} points earned!`);
-                    
-                    // Update task button
-                    event.currentTarget.textContent = '✅ Completed';
-                    event.currentTarget.disabled = true;
-                    event.currentTarget.style.background = '#28a745';
-                }
-            }, 3000);
-        }
-
-        // Referral Functions
-        function copyReferralLink() {
-            const link = document.getElementById('referral-link').textContent;
-            navigator.clipboard.writeText(link).then(() => {
-                alert('📋 Referral link copied to clipboard!');
-            });
-        }
-
-        // Admin Functions
-        function openAdminPanel() {
-            document.getElementById('admin-modal').style.display = 'block';
-        }
-
-        function closeAdminModal() {
-            document.getElementById('admin-modal').style.display = 'none';
-        }
-
-        function adminLogin() {
-            const email = document.getElementById('admin-email').value;
-            const password = document.getElementById('admin-password').value;
-            
-            // Check credentials
-            if (email === 'mkmunna2580@gmail.com' && password === 'mkMunna@haKear$xcmbn%njxdf') {
-                alert('✅ Admin login successful! Redirecting to admin panel...');
-                // Redirect to admin panel
-                window.open('https://ashraful.munnacodsit.xyz/app/admin.php', '_blank');
-                closeAdminModal();
-            } else {
-                alert('❌ Invalid credentials! Access denied.');
-            }
-        }
-
-        // Telegram Integration (Simulated)
-        function initTelegramUser() {
-            // In real implementation, this would connect to Telegram API
-            // For now, we'll simulate getting user data
-            if (window.Telegram && window.Telegram.WebApp) {
-                const tgUser = window.Telegram.WebApp.initDataUnsafe.user;
-                if (tgUser) {
-                    userData.username = tgUser.first_name + ' ' + (tgUser.last_name || '');
-                    userData.telegramId = tgUser.id;
-                    saveUserData();
-                    
-                    // Send user data to backend
-                    sendUserDataToBackend(tgUser);
-                }
-            }
-        }
-
-        function sendUserDataToBackend(telegramUser) {
-            // In real implementation, send to your backend
-            const userInfo = {
-                telegram_id: telegramUser.id,
-                username: telegramUser.username,
-                first_name: telegramUser.first_name,
-                last_name: telegramUser.last_name,
-                balance: userData.balance,
-                points: userData.points
-            };
-            
-            // Simulate API call
-            console.log('Sending user data to backend:', userInfo);
-            
-            // You would use fetch() to send to your PHP backend
-            /*
-            fetch('https://ashraful.munnacodsit.xyz/app/api/update_user.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(userInfo)
-            });
-            */
-        }
-
-        // Initialize everything when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            initGame();
-            loadUserData();
-            initTelegramUser();
-            
-            // Check for admin access (hidden feature)
-            let adminClicks = 0;
-            document.querySelector('.header h1').addEventListener('click', function() {
-                adminClicks++;
-                if (adminClicks >= 5) {
-                    openAdminPanel();
-                    adminClicks = 0;
-                }
-            });
-            
-            // Auto-save user data every 30 seconds
-            setInterval(saveUserData, 30000);
-        });
-
-        // Removed service worker registration to fix 404 error
-
-        // Payment verification function
-        function verifyTonPayment(transactionId, amount) {
-            // In real implementation, verify payment on blockchain
-            return fetch('https://ashraful.munnacodsit.xyz/app/api/verify_payment.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    transaction_id: transactionId,
-                    expected_amount: amount,
-                    user_id: userData.telegramId
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.verified) {
-                    userData.balance += data.coins;
-                    saveUserData();
-                    return true;
-                }
-                return false;
-            });
-        }
-
-        // Error handling
-        window.addEventListener('error', function(e) {
-            console.error('Application error:', e.error);
-            // In production, send error reports to your backend
-        });
-
-        // Prevent double-click exploitation
-        let lastClickTime = 0;
-        document.addEventListener('click', function(e) {
-            const currentTime = Date.now();
-            if (currentTime - lastClickTime < 300) {
-                e.preventDefault();
-                e.stopPropagation();
-                return false;
-            }
-            lastClickTime = currentTime;
         });
     </script>
 </body>
