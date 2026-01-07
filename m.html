@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tournament Showcase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            
+            #maineImage {
+                width: 90%;
+            }
+        }
+        
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+        
+        #blastEffect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,200,0,1) 30%, rgba(255,0,0,0.8) 60%, rgba(0,0,0,0) 100%);
+            animation: blast 0.5s ease-out;
+            z-index: 20;
+            pointer-events: none;
+        }
+        
+        #blastEffect.hidden {
+            display: none;
+        }
+        
+        @keyframes blast {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(3);
+                opacity: 0;
+            }
+        }
+        
+        /* Maine Image - Shows after blasts */
+        #maineImage {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 95%;
+            height: 95%;
+            z-index: 15;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        
+        #maineImage.visible {
+            display: block;
+            opacity: 1;
+        }
+        
+        #maineImage img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 15px;
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8);
+        }
+        
+        #mainContainer {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #mainContainer.active {
+            display: block;
+        }
+        
+        /* Civil Logo - Fixed in Corner */
+        #civilLogo {
+            position: fixed;
+            top: 90px;
+            left: 20px;
+            width: 180px;
+            height: 180px;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
+        }
+        
+        #civilLogo.visible {
+            opacity: 1;
+        }
+        
+        #civilLogo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 15px;
+        }
+        
+        /* Tournament Title */
+        #tournamentTitle {
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+        
+        #tournamentTitle.visible {
+            opacity: 1;
+        }
+        
+        #tournamentTitle h1 {
+            color: #FFD700;
+            font-size: 2.5rem;
+            font-weight: 800;
+            text-shadow: 0 5px 20px rgba(0, 0, 0, 0.9);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin: 0;
+            padding: 15px 40px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        /* Sliding Images Container */
+        #slidingContainer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .slideImage {
+            position: absolute;
+            width: 600px;
+            height: auto;
+            max-height: 85vh;
+            right: -700px;
+            opacity: 0;
+            z-index: 5;
+            border-radius: 20px;
+            box-shadow: 0 30px 100px rgba(0, 0, 0, 0.7);
+            transition: none;
+        }
+        
+        .slideImage img {
+            width: 100%;
+            height: auto;
+            border-radius: 20px;
+            display: block;
+        }
+        
+        .slideImage.sliding {
+            animation: slideAcross 8s ease-in-out;
+        }
+        
+        @keyframes slideAcross {
+            0% {
+                right: -700px;
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            50% {
+                right: 50%;
+                transform: translateX(50%);
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                right: 100%;
+                left: -700px;
+                opacity: 0;
+            }
+        }
+        
+        /* Text Below Images */
+        #slideText {
+            position: fixed;
+            bottom: 80px;
+            width: 100%;
+            text-align: center;
+            z-index: 6;
+            overflow: hidden;
+        }
+        
+        #slideText p {
+            display: inline-block;
+            color: #ffffff;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+            letter-spacing: 1px;
+            line-height: 1.6;
+            padding: 20px 40px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            white-space: nowrap;
+            animation: scrollText 15s linear infinite;
+        }
+        
+        @keyframes scrollText {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+        
+        /* Decorative Background Elements */
+        .bgDecor {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: float 20s infinite ease-in-out;
+        }
+        
+        .bgDecor:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .bgDecor:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            top: 60%;
+            right: 15%;
+            animation-delay: 5s;
+        }
+        
+        .bgDecor:nth-child(3) {
+            width: 250px;
+            height: 250px;
+            bottom: 10%;
+            left: 20%;
+            animation-delay: 10s;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            33% {
+                transform: translate(30px, -30px) scale(1.1);
+            }
+            66% {
+                transform: translate(-20px, 20px) scale(0.9);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .slideImage {
+                width: 85vw;
+                max-height: 70vh;
+            }
+            
+            #civilLogo {
+                width: 100px;
+                height: 100px;
+                top: 10px;
+                left: 10px;
+            }
+            
+            #tournamentTitle h1 {
+                font-size: 1.5rem;
+                letter-spacing: 1.5px;
+            }
+            
+            #slideText p {
+                font-size: 1.1rem;
+                padding: 15px 25px;
+            }
+            
+            #tournamentTitle h1 {
+                font-size: 1.5rem;
+                letter-spacing: 2px;
+                padding: 12px 30px;
+            }
+            
+            #tournamentTitle {
+                top: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- First Blast Effect -->
+    <div id="blastEffect"></div>
+    
+    <!-- Maine Image (Shows after blasts) -->
+    <div id="maineImage">
+        <img src="https://munnacodsit.xyz/Tournament-Lottery/in/Maine.jpeg" alt="Maine">
+    </div>
+    
+    <!-- Main Container -->
+    <div id="mainContainer">
+        <div class="bgDecor"></div>
+        <div class="bgDecor"></div>
+        <div class="bgDecor"></div>
+        
+        <!-- Civil Logo Fixed in Corner -->
+        <div id="civilLogo">
+            <img src="https://munnacodsit.xyz/Tournament-Lottery/in/civil.jpeg" alt="Civil Logo">
+        </div>
+        
+        <!-- Tournament Title -->
+        <div id="tournamentTitle">
+            <h1>PL Civil Premier League</h1>
+        </div>
+        
+        <!-- Sliding Images -->
+        <div id="slidingContainer"></div>
+        
+        <!-- Text Below Images -->
+        <div id="slideText">
+            <p>ডুমুরিয়া টুর্নামেন্ট ২০২৫ - শক্তিশালী দলগুলোর মধ্যে রোমাঞ্চকর প্রতিযোগিতা শুরু হতে চলেছে!</p>
+        </div>
+    </div>
+    
+    <script>
+        const images = [
+            'https://munnacodsit.xyz/Tournament-Lottery/in/civil1.jpeg',
+            'https://munnacodsit.xyz/Tournament-Lottery/in/Dumuriakings.jpeg',
+            'https://munnacodsit.xyz/Tournament-Lottery/in/Dumuriastrikers.jpeg',
+            'https://munnacodsit.xyz/Tournament-Lottery/in/Dumuriatitans.jpeg',
+            'https://munnacodsit.xyz/Tournament-Lottery/in/Dumuriavikings.jpeg',
+            'https://munnacodsit.xyz/Tournament-Lottery/in/Dumuriawarriors.jpeg',
+            'https://munnacodsit.xyz/Tournament-Lottery/in/Dumuriakings1.jpeg',
+            'https://munnacodsit.xyz/Tournament-Lottery/in/Dumuriastrikers1.jpeg',
+            'https://munnacodsit.xyz/Tournament-Lottery/in/Dumuriatitans1.jpeg',
+            'https://munnacodsit.xyz/Tournament-Lottery/in/Dumuriavikings1.jpeg',
+            'https://munnacodsit.xyz/Tournament-Lottery/in/Dumuriawarriors1.jpeg'
+        ];
+        
+        let currentImageIndex = 0;
+        
+        function createBlastSound() {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.type = 'sawtooth';
+            oscillator.frequency.setValueAtTime(100, audioContext.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(20, audioContext.currentTime + 0.5);
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.5);
+        }
+        
+        function triggerBlast() {
+            const blastEffect = document.getElementById('blastEffect');
+            blastEffect.classList.remove('hidden');
+            blastEffect.style.animation = 'none';
+            setTimeout(() => {
+                blastEffect.style.animation = 'blast 0.5s ease-out';
+            }, 10);
+            
+            createBlastSound();
+            
+            setTimeout(() => {
+                blastEffect.classList.add('hidden');
+            }, 500);
+        }
+        
+        function showNextImage() {
+            const container = document.getElementById('slidingContainer');
+            
+            // Remove old images
+            const oldImages = container.querySelectorAll('.slideImage');
+            oldImages.forEach(img => {
+                if (!img.classList.contains('sliding')) {
+                    img.remove();
+                }
+            });
+            
+            // Create new image
+            const slideDiv = document.createElement('div');
+            slideDiv.className = 'slideImage';
+            
+            const img = document.createElement('img');
+            img.src = images[currentImageIndex];
+            img.alt = 'Tournament Image';
+            
+            slideDiv.appendChild(img);
+            container.appendChild(slideDiv);
+            
+            // Start animation
+            setTimeout(() => {
+                slideDiv.classList.add('sliding');
+            }, 50);
+            
+            // Remove after animation
+            setTimeout(() => {
+                slideDiv.remove();
+            }, 8000);
+            
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+        }
+        
+        // First blast after 2 seconds
+        setTimeout(() => {
+            triggerBlast();
+        }, 2000);
+        
+        // Second blast after 2.5 seconds
+        setTimeout(() => {
+            triggerBlast();
+        }, 2500);
+        
+        // Show Maine image after blasts
+        setTimeout(() => {
+            const maineImage = document.getElementById('maineImage');
+            maineImage.classList.add('visible');
+        }, 3000);
+        
+        // Hide Maine image and show main container after 7 seconds
+        setTimeout(() => {
+            const maineImage = document.getElementById('maineImage');
+            const mainContainer = document.getElementById('mainContainer');
+            const civilLogo = document.getElementById('civilLogo');
+            const slideText = document.getElementById('slideText');
+            
+            maineImage.classList.remove('visible');
+            
+            setTimeout(() => {
+                maineImage.style.display = 'none';
+                mainContainer.classList.add('active');
+                civilLogo.classList.add('visible');
+                
+                // Start sliding images
+                showNextImage();
+                setInterval(showNextImage, 4000); // 4 seconds interval
+            }, 1000);
+        }, 10000); // Total 10 seconds (3s show + 7s display)
+    </script>
+</body>
+</html>
