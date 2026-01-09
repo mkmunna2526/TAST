@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luxury Scents - Premium Perfumes</title>
+    <title>Luxe Parfum - Luxury Scents, Half the Price</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -11,160 +12,149 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary-gold: #D4AF37;
+            --dark-bg: #1a1a1a;
+            --light-text: #f5f5f5;
+            --accent-red: #e74c3c;
+            --card-bg: #2a2a2a;
+            --border-gold: #b8960f;
+        }
+
         body {
-            font-family: 'Georgia', serif;
-            background: #f5f5f5;
-            color: #333;
+            font-family: 'Cormorant Garamond', serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: var(--light-text);
+            overflow-x: hidden;
         }
 
-        /* Header */
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;600&display=swap');
+
+        /* Header Styles */
         header {
-            background: rgba(0, 0, 0, 0.9);
-            padding: 15px 0;
             position: fixed;
-            width: 100%;
             top: 0;
+            width: 100%;
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(10px);
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
         }
 
-        .header-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 40px;
+        .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 10px 5%;
+            font-size: 14px;
+            font-family: 'Montserrat', sans-serif;
         }
 
-        nav {
+        .language-selector {
             display: flex;
-            gap: 40px;
-        }
-
-        nav a {
-            color: #d4af37;
-            text-decoration: none;
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: color 0.3s;
-            position: relative;
-        }
-
-        nav a:after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: #d4af37;
-            transition: width 0.3s;
-        }
-
-        nav a:hover:after {
-            width: 100%;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .lang-selector {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .lang-selector img {
-            width: 20px;
-            height: 15px;
-            cursor: pointer;
-            opacity: 0.7;
-            transition: opacity 0.3s;
-        }
-
-        .lang-selector img:hover {
-            opacity: 1;
+            gap: 15px;
         }
 
         .lang-btn {
             background: none;
-            border: 1px solid #d4af37;
-            color: #d4af37;
-            padding: 5px 12px;
+            border: none;
+            color: var(--light-text);
             cursor: pointer;
-            font-size: 11px;
-            letter-spacing: 1px;
+            padding: 5px 10px;
             transition: all 0.3s;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
         }
 
-        .lang-btn:hover {
-            background: #d4af37;
-            color: #000;
+        .lang-btn:hover, .lang-btn.active {
+            color: var(--primary-gold);
+            transform: translateY(-2px);
         }
 
         .cart-icon {
             position: relative;
             cursor: pointer;
-            color: #d4af37;
+            font-size: 20px;
+            transition: all 0.3s;
+        }
+
+        .cart-icon:hover {
+            color: var(--primary-gold);
+            transform: scale(1.1);
         }
 
         .cart-count {
             position: absolute;
             top: -8px;
             right: -8px;
-            background: #e74c3c;
+            background: var(--accent-red);
             color: white;
             border-radius: 50%;
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 10px;
-            font-weight: bold;
-        }
-
-        .discount-badge {
-            position: absolute;
-            top: 80px;
-            right: 40px;
-            background: #e74c3c;
-            color: white;
-            border-radius: 50%;
-            width: 70px;
-            height: 70px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
-            z-index: 10;
-        }
-
-        .discount-badge .percent {
-            font-size: 24px;
-            line-height: 1;
-        }
-
-        .discount-badge .off {
             font-size: 12px;
+            font-weight: bold;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary-gold);
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-size: 16px;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-gold);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
         }
 
         /* Hero Section */
         .hero {
-            margin-top: 60px;
-            height: 600px;
-            background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(0,0,0,0.4)), 
-                        url('https://images.unsplash.com/photo-1541643600914-78b084683601?w=1600&h=900&fit=crop') center/cover;
+            margin-top: 120px;
+            height: 80vh;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), 
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%231a1a1a"/><circle cx="600" cy="400" r="200" fill="%23D4AF37" opacity="0.1"/></svg>');
+            background-size: cover;
+            background-position: center;
             display: flex;
             align-items: center;
-            justify-content: flex-start;
+            justify-content: center;
+            text-align: center;
             position: relative;
             overflow: hidden;
         }
@@ -172,226 +162,233 @@
         .hero::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 70% 50%, transparent 0%, rgba(0,0,0,0.5) 100%);
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            top: 20%;
+            left: 10%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            bottom: 10%;
+            right: 15%;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-20px) scale(1.1); }
         }
 
         .hero-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 80px;
+            z-index: 1;
+            max-width: 800px;
+            padding: 40px;
+        }
+
+        .discount-badge {
+            display: inline-block;
+            background: var(--accent-red);
             color: white;
-            position: relative;
-            z-index: 2;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .hero h1 {
-            font-size: 58px;
-            font-weight: 300;
+            font-size: 64px;
+            margin-bottom: 20px;
             line-height: 1.2;
-            margin-bottom: 15px;
-            letter-spacing: 3px;
+            font-weight: 700;
         }
 
         .hero p {
-            font-size: 16px;
+            font-size: 20px;
             margin-bottom: 40px;
-            letter-spacing: 2px;
-            color: #d4af37;
+            font-family: 'Montserrat', sans-serif;
+            opacity: 0.9;
         }
 
-        .hero-btn {
-            border: 2px solid #d4af37;
+        .cta-btn {
+            display: inline-block;
+            padding: 18px 50px;
+            background: var(--primary-gold);
+            color: var(--dark-bg);
+            text-decoration: none;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            border-radius: 5px;
+            transition: all 0.3s;
+            border: 2px solid var(--primary-gold);
+        }
+
+        .cta-btn:hover {
             background: transparent;
-            color: #d4af37;
-            padding: 15px 40px;
-            font-size: 13px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.4s;
-        }
-
-        .hero-btn:hover {
-            background: #d4af37;
-            color: #000;
-            transform: translateY(-2px);
+            color: var(--primary-gold);
+            transform: translateY(-3px);
             box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
         }
 
-        /* Product Grid */
+        /* Products Section */
         .products-section {
-            max-width: 1400px;
-            margin: -100px auto 80px;
-            padding: 0 40px;
-            position: relative;
-            z-index: 5;
+            padding: 100px 5%;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: var(--primary-gold);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 18px;
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 60px;
+            opacity: 0.8;
         }
 
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
         .product-card {
-            background: white;
-            border-radius: 8px;
+            background: var(--card-bg);
+            border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
             transition: all 0.4s;
+            border: 1px solid rgba(212, 175, 55, 0.2);
             position: relative;
         }
 
         .product-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.2);
+            border-color: var(--primary-gold);
         }
 
         .product-badge {
             position: absolute;
             top: 15px;
             right: 15px;
-            background: #e74c3c;
+            background: var(--accent-red);
             color: white;
-            border-radius: 50%;
-            width: 55px;
-            height: 55px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            padding: 8px 15px;
+            border-radius: 50px;
             font-weight: bold;
+            font-size: 14px;
             z-index: 10;
-            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
-        }
-
-        .product-badge .percent {
-            font-size: 18px;
-            line-height: 1;
-        }
-
-        .product-badge .off {
-            font-size: 10px;
         }
 
         .product-image {
             width: 100%;
-            height: 280px;
+            height: 300px;
             object-fit: cover;
-            background: #f8f8f8;
-            padding: 30px;
+            background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            color: var(--primary-gold);
         }
 
         .product-info {
             padding: 25px;
-            text-align: center;
         }
 
         .product-name {
-            font-size: 18px;
-            font-weight: 400;
-            margin-bottom: 8px;
-            color: #2c3e50;
-        }
-
-        .product-subtitle {
-            font-size: 12px;
-            color: #95a5a6;
-            margin-bottom: 15px;
-            text-decoration: line-through;
-        }
-
-        .product-price {
             font-size: 24px;
-            font-weight: bold;
-            color: #2c3e50;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .product-brand {
+            font-size: 14px;
+            color: var(--primary-gold);
+            margin-bottom: 15px;
+            font-family: 'Montserrat', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .price-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
             margin-bottom: 20px;
         }
 
-        .product-actions {
+        .current-price {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--primary-gold);
+        }
+
+        .original-price {
+            font-size: 18px;
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        .product-buttons {
             display: flex;
             gap: 10px;
         }
 
-        .btn-details, .btn-add {
+        .btn {
             flex: 1;
             padding: 12px;
             border: none;
+            border-radius: 5px;
             cursor: pointer;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
             transition: all 0.3s;
         }
 
         .btn-details {
-            background: white;
-            border: 1px solid #2c3e50;
-            color: #2c3e50;
+            background: transparent;
+            color: var(--primary-gold);
+            border: 2px solid var(--primary-gold);
         }
 
         .btn-details:hover {
-            background: #2c3e50;
-            color: white;
+            background: var(--primary-gold);
+            color: var(--dark-bg);
         }
 
-        .btn-add {
-            background: #2c3e50;
-            color: white;
+        .btn-cart {
+            background: var(--primary-gold);
+            color: var(--dark-bg);
         }
 
-        .btn-add:hover {
-            background: #1a252f;
-            transform: translateY(-2px);
+        .btn-cart:hover {
+            background: var(--border-gold);
+            transform: scale(1.05);
         }
 
-        /* How to Buy Section */
-        .how-to-buy {
-            background: white;
-            padding: 80px 40px;
-            margin-top: 60px;
-        }
-
-        .how-to-buy h2 {
-            text-align: center;
-            font-size: 36px;
-            font-weight: 300;
-            margin-bottom: 60px;
-            color: #2c3e50;
-            letter-spacing: 2px;
-        }
-
-        .crypto-steps {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 30px;
-        }
-
-        .crypto-icon {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-        }
-
-        .crypto-icon-item {
-            width: 60px;
-            height: 60px;
-            background: #f8f9fa;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-        }
-
-        /* Modal */
+        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -399,42 +396,63 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0, 0, 0, 0.9);
             z-index: 2000;
-            align-items: center;
-            justify-content: center;
+            overflow-y: auto;
         }
 
         .modal.active {
             display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .modal-content {
-            background: white;
-            width: 90%;
+            background: var(--card-bg);
+            border-radius: 20px;
             max-width: 900px;
+            width: 90%;
             max-height: 90vh;
             overflow-y: auto;
-            border-radius: 8px;
             position: relative;
+            margin: 20px;
+            border: 2px solid var(--primary-gold);
+            animation: slideUp 0.3s;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         .modal-close {
             position: absolute;
             top: 20px;
             right: 20px;
+            background: var(--accent-red);
+            border: none;
+            color: white;
             width: 40px;
             height: 40px;
-            background: #2c3e50;
-            color: white;
-            border: none;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 24px;
+            font-size: 20px;
             z-index: 10;
+            transition: all 0.3s;
         }
 
-        .modal-grid {
+        .modal-close:hover {
+            transform: rotate(90deg);
+            background: #c0392b;
+        }
+
+        .modal-body {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 40px;
@@ -443,57 +461,97 @@
 
         .modal-image {
             width: 100%;
-            border-radius: 8px;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 120px;
+            color: var(--primary-gold);
         }
 
-        .modal-info h2 {
-            font-size: 32px;
-            margin-bottom: 10px;
-            color: #2c3e50;
-        }
-
-        .modal-brand {
-            color: #95a5a6;
-            margin-bottom: 20px;
-        }
-
-        .modal-description {
-            line-height: 1.8;
-            margin-bottom: 20px;
-            color: #555;
-        }
-
-        .modal-price-section {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-
-        .modal-price {
+        .modal-details h2 {
             font-size: 36px;
-            font-weight: bold;
-            color: #2c3e50;
+            margin-bottom: 10px;
         }
 
-        .modal-original {
-            text-decoration: line-through;
-            color: #95a5a6;
-            margin-left: 15px;
+        .modal-details .product-brand {
+            margin-bottom: 20px;
+        }
+
+        .modal-details .product-description {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            opacity: 0.9;
+        }
+
+        .volume-selector {
+            margin-bottom: 25px;
+        }
+
+        .volume-selector label {
+            display: block;
+            margin-bottom: 10px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+        }
+
+        .volume-options {
+            display: flex;
+            gap: 10px;
+        }
+
+        .volume-option {
+            padding: 10px 20px;
+            border: 2px solid var(--primary-gold);
+            background: transparent;
+            color: var(--light-text);
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .volume-option:hover, .volume-option.active {
+            background: var(--primary-gold);
+            color: var(--dark-bg);
+        }
+
+        .info-section {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .info-section h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: var(--primary-gold);
+        }
+
+        .info-section p {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.8;
+            opacity: 0.9;
+            font-size: 14px;
         }
 
         /* Cart Sidebar */
         .cart-sidebar {
             position: fixed;
-            right: -400px;
+            right: -450px;
             top: 0;
-            width: 400px;
+            width: 450px;
             height: 100%;
-            background: white;
-            box-shadow: -5px 0 25px rgba(0,0,0,0.2);
-            z-index: 3000;
+            background: var(--card-bg);
+            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.5);
+            z-index: 2001;
             transition: right 0.4s;
-            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
         }
 
         .cart-sidebar.active {
@@ -501,51 +559,100 @@
         }
 
         .cart-header {
-            background: #2c3e50;
-            color: white;
-            padding: 25px;
+            padding: 30px;
+            border-bottom: 2px solid var(--primary-gold);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .cart-close {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
+        .cart-header h2 {
+            font-size: 28px;
+            color: var(--primary-gold);
         }
 
         .cart-items {
+            flex: 1;
+            overflow-y: auto;
             padding: 20px;
         }
 
         .cart-item {
             display: flex;
             gap: 15px;
-            padding: 15px 0;
-            border-bottom: 1px solid #eee;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            margin-bottom: 15px;
         }
 
         .cart-item-image {
             width: 80px;
             height: 80px;
-            object-fit: cover;
-            border-radius: 4px;
+            background: linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: var(--primary-gold);
         }
 
-        .cart-item-info {
+        .cart-item-details {
             flex: 1;
         }
 
-        .cart-total {
-            padding: 25px;
-            background: #f8f9fa;
-            border-top: 2px solid #2c3e50;
+        .cart-item-name {
+            font-size: 18px;
+            margin-bottom: 5px;
         }
 
-        .cart-total-amount {
+        .cart-item-price {
+            color: var(--primary-gold);
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border: 1px solid var(--primary-gold);
+            background: transparent;
+            color: var(--primary-gold);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quantity-btn:hover {
+            background: var(--primary-gold);
+            color: var(--dark-bg);
+        }
+
+        .remove-btn {
+            color: var(--accent-red);
+            cursor: pointer;
+            margin-left: auto;
+            font-size: 20px;
+            transition: all 0.3s;
+        }
+
+        .remove-btn:hover {
+            transform: scale(1.2);
+        }
+
+        .cart-footer {
+            padding: 30px;
+            border-top: 2px solid var(--primary-gold);
+        }
+
+        .cart-total {
             display: flex;
             justify-content: space-between;
             font-size: 24px;
@@ -555,149 +662,409 @@
 
         .checkout-btn {
             width: 100%;
-            padding: 15px;
-            background: #27ae60;
-            color: white;
+            padding: 18px;
+            background: var(--primary-gold);
+            color: var(--dark-bg);
             border: none;
-            font-size: 16px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
+            font-family: 'Montserrat', sans-serif;
         }
 
         .checkout-btn:hover {
-            background: #229954;
+            background: var(--border-gold);
+            transform: scale(1.05);
         }
 
-        @media (max-width: 1200px) {
-            .products-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
+        /* Checkout Modal */
+        .checkout-form {
+            padding: 40px;
         }
 
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 8px;
+            color: var(--light-text);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-gold);
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .payment-option {
+            padding: 20px;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .payment-option:hover,
+        .payment-option.active {
+            border-color: var(--primary-gold);
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        .payment-option i {
+            font-size: 32px;
+            margin-bottom: 10px;
+            color: var(--primary-gold);
+        }
+
+        .crypto-wallets {
+            display: none;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .crypto-wallets.active {
+            display: grid;
+        }
+
+        .wallet-option {
+            padding: 20px;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .wallet-option:hover {
+            border-color: var(--primary-gold);
+            background: rgba(212, 175, 55, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .wallet-option i {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        /* How to Buy Section */
+        .how-to-buy {
+            padding: 100px 5%;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .step-card {
+            text-align: center;
+            padding: 40px 30px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            border: 2px solid rgba(212, 175, 55, 0.2);
+            transition: all 0.3s;
+        }
+
+        .step-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary-gold);
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-gold);
+            color: var(--dark-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            margin: 0 auto 20px;
+        }
+
+        .step-card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: var(--primary-gold);
+        }
+
+        .step-card p {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        footer {
+            background: #0a0a0a;
+            padding: 60px 5% 30px;
+            border-top: 2px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto 40px;
+        }
+
+        .footer-section h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: var(--primary-gold);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary-gold);
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            font-family: 'Montserrat', sans-serif;
+            opacity: 0.8;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 60px 20px;
+            opacity: 0.7;
+        }
+
+        .empty-cart i {
+            font-size: 80px;
+            color: var(--primary-gold);
+            margin-bottom: 20px;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            .products-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            nav {
-                display: none;
+            .hero h1 {
+                font-size: 40px;
             }
 
-            .modal-grid {
+            .modal-body {
                 grid-template-columns: 1fr;
             }
+
+            .cart-sidebar {
+                width: 100%;
+                right: -100%;
+            }
+
+            .nav-links {
+                gap: 20px;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .payment-methods,
+            .crypto-wallets {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(212, 175, 55, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-gold);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
     <!-- Header -->
     <header>
-        <div class="header-container">
-            <nav>
-                <a href="#home">HOME</a>
-                <a href="#catalog">CATALOG</a>
-                <a href="#about">ABOUT</a>
-                <a href="#contact">CONTACT</a>
-            </nav>
-            <div class="header-right">
-                <div class="lang-selector">
-                    🇬🇧 <button class="lang-btn" onclick="changeLang('en')">EN</button>
-                    🇩🇪 <button class="lang-btn" onclick="changeLang('de')">DE</button>
-                    🇪🇸 <button class="lang-btn" onclick="changeLang('es')">ES</button>
-                    🇫🇷 <button class="lang-btn" onclick="changeLang('fr')">FR</button>
-                </div>
-                <div class="cart-icon" onclick="toggleCart()">
-                    🛒
-                    <span class="cart-count" id="cartCount">0</span>
-                </div>
+        <div class="top-bar">
+            <div class="language-selector">
+                <button class="lang-btn active" data-lang="en">🇬🇧 EN</button>
+                <button class="lang-btn" data-lang="de">🇩🇪 DE</button>
+                <button class="lang-btn" data-lang="es">🇪🇸 ES</button>
+                <button class="lang-btn" data-lang="fr">🇫🇷 FR</button>
+            </div>
+            <div class="cart-icon" onclick="toggleCart()">
+                <i class="fas fa-shopping-bag"></i>
+                <span class="cart-count" id="cartCount">0</span>
             </div>
         </div>
+        <nav>
+            <div class="logo" data-translate="logo">LUXE PARFUM</div>
+            <ul class="nav-links">
+                <li><a href="#home" data-translate="nav_home">HOME</a></li>
+                <li><a href="#catalog" data-translate="nav_catalog">CATALOG</a></li>
+                <li><a href="#about" data-translate="nav_about">ABOUT</a></li>
+                <li><a href="#contact" data-translate="nav_contact">CONTACT</a></li>
+            </ul>
+        </nav>
     </header>
-
-    <!-- Discount Badge -->
-    <div class="discount-badge">
-        <div class="percent">50%</div>
-        <div class="off">OFF</div>
-    </div>
 
     <!-- Hero Section -->
     <section class="hero" id="home">
         <div class="hero-content">
-            <h1>Luxury Scents,<br>Half the Price</h1>
-            <p>Exclusive European Collection - Now 50% OFF</p>
-            <button class="hero-btn" onclick="document.getElementById('catalog').scrollIntoView({behavior: 'smooth'})">
-                Shop the Collection
-            </button>
+            <div class="discount-badge" data-translate="discount_badge">-50% OFF</div>
+            <h1 data-translate="hero_title">Luxury Scents,<br>Half the Price</h1>
+            <p data-translate="hero_subtitle">Exclusive European Collection - Now 50% OFF</p>
+            <a href="#catalog" class="cta-btn" data-translate="cta_shop">Shop the Collection</a>
         </div>
     </section>
 
     <!-- Products Section -->
     <section class="products-section" id="catalog">
+        <h2 class="section-title" data-translate="products_title">Our Collection</h2>
+        <p class="section-subtitle" data-translate="products_subtitle">Premium fragrances at unbeatable prices</p>
         <div class="products-grid" id="productsGrid">
-            <!-- Products will be loaded here by JavaScript -->
+            <!-- Products will be loaded here -->
         </div>
     </section>
 
-    <!-- How to Buy with Cryptocurrency -->
-    <section class="how-to-buy">
-        <h2>HOW TO BUY WITH CRYPTOCURRENCY</h2>
-        <div class="crypto-steps">
-            <div style="text-align: center;">
-                <div style="font-size: 48px; margin-bottom: 15px;">1️⃣</div>
-                <p>Choose cryptocurrency<br>payment at checkout</p>
+    <!-- How to Buy Section -->
+    <section class="how-to-buy" id="about">
+        <h2 class="section-title" data-translate="how_to_buy_title">How to Buy</h2>
+        <p class="section-subtitle" data-translate="how_to_buy_subtitle">Simple steps to get your luxury perfumes</p>
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <h3 data-translate="step1_title">Browse Collection</h3>
+                <p data-translate="step1_desc">Explore our exclusive selection of luxury perfumes</p>
             </div>
-            <div style="font-size: 36px; color: #d4af37;">→</div>
-            <div style="text-align: center;">
-                <div style="font-size: 48px; margin-bottom: 15px;">2️⃣</div>
-                <p>Connect your<br>crypto wallet</p>
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <h3 data-translate="step2_title">Add to Cart</h3>
+                <p data-translate="step2_desc">Select your favorites and add them to your cart</p>
             </div>
-            <div style="font-size: 36px; color: #d4af37;">→</div>
-            <div style="text-align: center;">
-                <div style="font-size: 48px; margin-bottom: 15px;">3️⃣</div>
-                <p>Complete the<br>transaction</p>
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <h3 data-translate="step3_title">Choose Payment</h3>
+                <p data-translate="step3_desc">Pay with standard methods or cryptocurrency</p>
             </div>
-            <div style="font-size: 36px; color: #d4af37;">→</div>
-            <div style="text-align: center;">
-                <div class="crypto-icon">
-                    <div class="crypto-icon-item">₿</div>
-                    <div class="crypto-icon-item">Ξ</div>
-                    <div class="crypto-icon-item">💰</div>
-                </div>
+            <div class="step-card">
+                <div class="step-number">4</div>
+                <h3 data-translate="step4_title">Enjoy Delivery</h3>
+                <p data-translate="step4_desc">Receive your perfumes with free shipping</p>
             </div>
         </div>
     </section>
 
-    <!-- Product Modal -->
+    <!-- Crypto Payment Section -->
+    <section class="how-to-buy" style="padding-top: 50px;">
+        <h2 class="section-title" data-translate="crypto_title">Crypto Payment</h2>
+        <p class="section-subtitle" data-translate="crypto_subtitle">We accept major cryptocurrencies for your convenience</p>
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-number"><i class="fab fa-bitcoin"></i></div>
+                <h3 data-translate="crypto_step1_title">Select Crypto</h3>
+                <p data-translate="crypto_step1_desc">Choose your preferred cryptocurrency wallet</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number"><i class="fas fa-wallet"></i></div>
+                <h3 data-translate="crypto_step2_title">Connect Wallet</h3>
+                <p data-translate="crypto_step2_desc">Securely connect your crypto wallet</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number"><i class="fas fa-check-circle"></i></div>
+                <h3 data-translate="crypto_step3_title">Confirm Payment</h3>
+                <p data-translate="crypto_step3_desc">Complete transaction in your wallet</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3 data-translate="footer_about">About Us</h3>
+                <p data-translate="footer_about_text">Premium luxury perfumes at affordable prices. We bring European elegance to your doorstep.</p>
+            </div>
+            <div class="footer-section">
+                <h3 data-translate="footer_links">Quick Links</h3>
+                <ul>
+                    <li><a href="#" data-translate="footer_privacy">Privacy Policy</a></li>
+                    <li><a href="#" data-translate="footer_terms">Terms of Use</a></li>
+                    <li><a href="#" data-translate="footer_returns">Return Policy</a></li>
+                    <li><a href="#" data-translate="footer_shipping">Shipping Info</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3 data-translate="footer_contact">Contact</h3>
+                <ul>
+                    <li><i class="fas fa-envelope"></i> info@luxeparfum.com</li>
+                    <li><i class="fas fa-phone"></i> +49 123 456 7890</li>
+                    <li><i class="fas fa-map-marker-alt"></i> Berlin, Germany</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Luxe Parfum. <span data-translate="footer_rights">All rights reserved.</span></p>
+        </div>
+    </footer>
+
+    <!-- Product Detail Modal -->
     <div class="modal" id="productModal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()">×</button>
-            <div class="modal-grid">
-                <div>
-                    <img id="modalImage" class="modal-image" src="" alt="">
-                </div>
-                <div class="modal-info">
-                    <h2 id="modalName"></h2>
-                    <p class="modal-brand" id="modalBrand"></p>
-                    <p class="modal-description" id="modalDescription"></p>
-                    <div class="modal-price-section">
-                        <span class="modal-price" id="modalPrice"></span>
-                        <span class="modal-original" id="modalOriginal"></span>
-                        <div style="margin-top: 10px; color: #e74c3c; font-weight: bold;">✓ 50% OFF Applied</div>
-                    </div>
-                    <button class="btn-add" style="width: 100%; padding: 15px; margin-top: 20px;" onclick="addToCartFromModal()">
-                        Add to Cart
-                    </button>
-                    <div style="margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
-                        <h4 style="margin-bottom: 10px;">🚚 Shipping & Returns</h4>
-                        <p style="font-size: 14px; color: #666;">Free shipping on all EU orders. 30-day return policy.</p>
-                    </div>
-                    <div style="margin-top: 15px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
-                        <h4 style="margin-bottom: 10px;">💳 Payment</h4>
-                        <p style="font-size: 14px; color: #666;">Secure payment processing. Cryptocurrency accepted.</p>
-                    </div>
-                </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Modal content will be loaded here -->
             </div>
         </div>
     </div>
@@ -705,151 +1072,613 @@
     <!-- Cart Sidebar -->
     <div class="cart-sidebar" id="cartSidebar">
         <div class="cart-header">
-            <h2>Shopping Cart</h2>
-            <button class="cart-close" onclick="toggleCart()">×</button>
+            <h2 data-translate="cart_title">Shopping Cart</h2>
+            <button class="modal-close" onclick="toggleCart()">×</button>
         </div>
         <div class="cart-items" id="cartItems">
-            <p style="text-align: center; padding: 40px; color: #999;">Your cart is empty</p>
+            <div class="empty-cart">
+                <i class="fas fa-shopping-bag"></i>
+                <p data-translate="cart_empty">Your cart is empty</p>
+            </div>
         </div>
-        <div class="cart-total">
-            <div class="cart-total-amount">
-                <span>Total:</span>
+        <div class="cart-footer" id="cartFooter" style="display: none;">
+            <div class="cart-total">
+                <span data-translate="cart_total">Total:</span>
                 <span id="cartTotal">€0.00</span>
             </div>
-            <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+            <button class="checkout-btn" onclick="openCheckout()" data-translate="checkout_btn">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="modal" id="checkoutModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeCheckout()">×</button>
+            <div class="checkout-form">
+                <h2 class="section-title" data-translate="checkout_title">Checkout</h2>
+                <form id="checkoutForm">
+                    <div class="form-group">
+                        <label data-translate="form_firstname">First Name</label>
+                        <input type="text" id="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label data-translate="form_lastname">Last Name</label>
+                        <input type="text" id="lastName" required>
+                    </div>
+                    <div class="form-group">
+                        <label data-translate="form_email">Email</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label data-translate="form_address">Shipping Address</label>
+                        <textarea id="address" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label data-translate="form_payment">Payment Method</label>
+                        <div class="payment-methods">
+                            <div class="payment-option" onclick="selectPayment('standard')">
+                                <i class="fas fa-credit-card"></i>
+                                <div data-translate="payment_standard">Standard Payment</div>
+                            </div>
+                            <div class="payment-option" onclick="selectPayment('crypto')">
+                                <i class="fab fa-bitcoin"></i>
+                                <div data-translate="payment_crypto">Cryptocurrency</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="crypto-wallets" id="cryptoWallets">
+                        <div class="wallet-option" onclick="selectWallet('ton')">
+                            <i class="fas fa-gem"></i>
+                            <div>TON Wallet</div>
+                        </div>
+                        <div class="wallet-option" onclick="selectWallet('metamask')">
+                            <i class="fab fa-ethereum"></i>
+                            <div>MetaMask</div>
+                        </div>
+                        <div class="wallet-option" onclick="selectWallet('trustwallet')">
+                            <i class="fas fa-shield-alt"></i>
+                            <div>Trust Wallet</div>
+                        </div>
+                        <div class="wallet-option" onclick="selectWallet('coinbase')">
+                            <i class="fab fa-bitcoin"></i>
+                            <div>Coinbase</div>
+                        </div>
+                        <div class="wallet-option" onclick="selectWallet('binance')">
+                            <i class="fas fa-coins"></i>
+                            <div>Binance</div>
+                        </div>
+                        <div class="wallet-option" onclick="selectWallet('phantom')">
+                            <i class="fas fa-ghost"></i>
+                            <div>Phantom</div>
+                        </div>
+                    </div>
+                    <button type="submit" class="checkout-btn" style="margin-top: 30px;" data-translate="place_order">Place Order</button>
+                </form>
+            </div>
         </div>
     </div>
 
     <script>
+        // Translations
+        const translations = {
+            en: {
+                logo: "LUXE PARFUM",
+                nav_home: "HOME",
+                nav_catalog: "CATALOG",
+                nav_about: "ABOUT",
+                nav_contact: "CONTACT",
+                discount_badge: "-50% OFF",
+                hero_title: "Luxury Scents,<br>Half the Price",
+                hero_subtitle: "Exclusive European Collection - Now 50% OFF",
+                cta_shop: "Shop the Collection",
+                products_title: "Our Collection",
+                products_subtitle: "Premium fragrances at unbeatable prices",
+                how_to_buy_title: "How to Buy",
+                how_to_buy_subtitle: "Simple steps to get your luxury perfumes",
+                step1_title: "Browse Collection",
+                step1_desc: "Explore our exclusive selection of luxury perfumes",
+                step2_title: "Add to Cart",
+                step2_desc: "Select your favorites and add them to your cart",
+                step3_title: "Choose Payment",
+                step3_desc: "Pay with standard methods or cryptocurrency",
+                step4_title: "Enjoy Delivery",
+                step4_desc: "Receive your perfumes with free shipping",
+                crypto_title: "Crypto Payment",
+                crypto_subtitle: "We accept major cryptocurrencies for your convenience",
+                crypto_step1_title: "Select Crypto",
+                crypto_step1_desc: "Choose your preferred cryptocurrency wallet",
+                crypto_step2_title: "Connect Wallet",
+                crypto_step2_desc: "Securely connect your crypto wallet",
+                crypto_step3_title: "Confirm Payment",
+                crypto_step3_desc: "Complete transaction in your wallet",
+                footer_about: "About Us",
+                footer_about_text: "Premium luxury perfumes at affordable prices. We bring European elegance to your doorstep.",
+                footer_links: "Quick Links",
+                footer_privacy: "Privacy Policy",
+                footer_terms: "Terms of Use",
+                footer_returns: "Return Policy",
+                footer_shipping: "Shipping Info",
+                footer_contact: "Contact",
+                footer_rights: "All rights reserved.",
+                cart_title: "Shopping Cart",
+                cart_empty: "Your cart is empty",
+                cart_total: "Total:",
+                checkout_btn: "Proceed to Checkout",
+                checkout_title: "Checkout",
+                form_firstname: "First Name",
+                form_lastname: "Last Name",
+                form_email: "Email",
+                form_address: "Shipping Address",
+                form_payment: "Payment Method",
+                payment_standard: "Standard Payment",
+                payment_crypto: "Cryptocurrency",
+                place_order: "Place Order",
+                details: "Details",
+                add_to_cart: "Add to Cart",
+                description: "Description",
+                volume: "Volume",
+                shipping_info: "Shipping Information",
+                shipping_text: "Free shipping on all orders. Delivery within 5-7 business days.",
+                payment_info: "Payment Information",
+                payment_text: "We accept credit cards, PayPal, and all major cryptocurrencies.",
+                quantity: "Quantity"
+            },
+            de: {
+                logo: "LUXE PARFUM",
+                nav_home: "STARTSEITE",
+                nav_catalog: "KATALOG",
+                nav_about: "ÜBER UNS",
+                nav_contact: "KONTAKT",
+                discount_badge: "-50% RABATT",
+                hero_title: "Luxusdüfte,<br>Halber Preis",
+                hero_subtitle: "Exklusive Europäische Kollektion - Jetzt 50% RABATT",
+                cta_shop: "Kollektion kaufen",
+                products_title: "Unsere Kollektion",
+                products_subtitle: "Premium-Düfte zu unschlagbaren Preisen",
+                how_to_buy_title: "Wie zu kaufen",
+                how_to_buy_subtitle: "Einfache Schritte zu Ihren Luxusparfums",
+                step1_title: "Kollektion durchsuchen",
+                step1_desc: "Entdecken Sie unsere exklusive Auswahl an Luxusparfums",
+                step2_title: "In den Warenkorb",
+                step2_desc: "Wählen Sie Ihre Favoriten und fügen Sie sie hinzu",
+                step3_title: "Zahlung wählen",
+                step3_desc: "Bezahlen Sie mit Standardmethoden oder Kryptowährung",
+                step4_title: "Lieferung genießen",
+                step4_desc: "Erhalten Sie Ihre Parfums mit kostenlosem Versand",
+                crypto_title: "Krypto-Zahlung",
+                crypto_subtitle: "Wir akzeptieren wichtige Kryptowährungen für Ihre Bequemlichkeit",
+                crypto_step1_title: "Krypto wählen",
+                crypto_step1_desc: "Wählen Sie Ihre bevorzugte Kryptowährungs-Wallet",
+                crypto_step2_title: "Wallet verbinden",
+                crypto_step2_desc: "Verbinden Sie sicher Ihre Krypto-Wallet",
+                crypto_step3_title: "Zahlung bestätigen",
+                crypto_step3_desc: "Transaktion in Ihrer Wallet abschließen",
+                footer_about: "Über uns",
+                footer_about_text: "Premium-Luxusparfums zu erschwinglichen Preisen. Wir bringen europäische Eleganz zu Ihnen.",
+                footer_links: "Schnelllinks",
+                footer_privacy: "Datenschutz",
+                footer_terms: "Nutzungsbedingungen",
+                footer_returns: "Rückgaberecht",
+                footer_shipping: "Versandinfo",
+                footer_contact: "Kontakt",
+                footer_rights: "Alle Rechte vorbehalten.",
+                cart_title: "Warenkorb",
+                cart_empty: "Ihr Warenkorb ist leer",
+                cart_total: "Gesamt:",
+                checkout_btn: "Zur Kasse",
+                checkout_title: "Kasse",
+                form_firstname: "Vorname",
+                form_lastname: "Nachname",
+                form_email: "E-Mail",
+                form_address: "Lieferadresse",
+                form_payment: "Zahlungsmethode",
+                payment_standard: "Standardzahlung",
+                payment_crypto: "Kryptowährung",
+                place_order: "Bestellung aufgeben",
+                details: "Details",
+                add_to_cart: "In den Warenkorb",
+                description: "Beschreibung",
+                volume: "Volumen",
+                shipping_info: "Versandinformationen",
+                shipping_text: "Kostenloser Versand bei allen Bestellungen. Lieferung innerhalb von 5-7 Werktagen.",
+                payment_info: "Zahlungsinformationen",
+                payment_text: "Wir akzeptieren Kreditkarten, PayPal und alle wichtigen Kryptowährungen.",
+                quantity: "Menge"
+            },
+            es: {
+                logo: "LUXE PARFUM",
+                nav_home: "INICIO",
+                nav_catalog: "CATÁLOGO",
+                nav_about: "ACERCA DE",
+                nav_contact: "CONTACTO",
+                discount_badge: "-50% DE DESCUENTO",
+                hero_title: "Aromas de Lujo,<br>Mitad de Precio",
+                hero_subtitle: "Colección Europea Exclusiva - Ahora 50% DE DESCUENTO",
+                cta_shop: "Comprar la Colección",
+                products_title: "Nuestra Colección",
+                products_subtitle: "Fragancias premium a precios inmejorables",
+                how_to_buy_title: "Cómo Comprar",
+                how_to_buy_subtitle: "Pasos simples para obtener sus perfumes de lujo",
+                step1_title: "Explorar Colección",
+                step1_desc: "Explore nuestra selección exclusiva de perfumes de lujo",
+                step2_title: "Añadir al Carrito",
+                step2_desc: "Seleccione sus favoritos y añádalos al carrito",
+                step3_title: "Elegir Pago",
+                step3_desc: "Pague con métodos estándar o criptomoneda",
+                step4_title: "Disfrutar la Entrega",
+                step4_desc: "Reciba sus perfumes con envío gratis",
+                crypto_title: "Pago Cripto",
+                crypto_subtitle: "Aceptamos las principales criptomonedas para su comodidad",
+                crypto_step1_title: "Seleccionar Cripto",
+                crypto_step1_desc: "Elija su billetera de criptomonedas preferida",
+                crypto_step2_title: "Conectar Billetera",
+                crypto_step2_desc: "Conecte de forma segura su billetera cripto",
+                crypto_step3_title: "Confirmar Pago",
+                crypto_step3_desc: "Complete la transacción en su billetera",
+                footer_about: "Sobre Nosotros",
+                footer_about_text: "Perfumes de lujo premium a precios asequibles. Traemos elegancia europea a su puerta.",
+                footer_links: "Enlaces Rápidos",
+                footer_privacy: "Política de Privacidad",
+                footer_terms: "Términos de Uso",
+                footer_returns: "Política de Devoluciones",
+                footer_shipping: "Info de Envío",
+                footer_contact: "Contacto",
+                footer_rights: "Todos los derechos reservados.",
+                cart_title: "Carrito de Compras",
+                cart_empty: "Su carrito está vacío",
+                cart_total: "Total:",
+                checkout_btn: "Proceder al Pago",
+                checkout_title: "Pagar",
+                form_firstname: "Nombre",
+                form_lastname: "Apellido",
+                form_email: "Correo Electrónico",
+                form_address: "Dirección de Envío",
+                form_payment: "Método de Pago",
+                payment_standard: "Pago Estándar",
+                payment_crypto: "Criptomoneda",
+                place_order: "Realizar Pedido",
+                details: "Detalles",
+                add_to_cart: "Añadir al Carrito",
+                description: "Descripción",
+                volume: "Volumen",
+                shipping_info: "Información de Envío",
+                shipping_text: "Envío gratis en todos los pedidos. Entrega en 5-7 días hábiles.",
+                payment_info: "Información de Pago",
+                payment_text: "Aceptamos tarjetas de crédito, PayPal y todas las criptomonedas principales.",
+                quantity: "Cantidad"
+            },
+            fr: {
+                logo: "LUXE PARFUM",
+                nav_home: "ACCUEIL",
+                nav_catalog: "CATALOGUE",
+                nav_about: "À PROPOS",
+                nav_contact: "CONTACT",
+                discount_badge: "-50% DE RÉDUCTION",
+                hero_title: "Parfums de Luxe,<br>Moitié Prix",
+                hero_subtitle: "Collection Européenne Exclusive - Maintenant 50% DE RÉDUCTION",
+                cta_shop: "Acheter la Collection",
+                products_title: "Notre Collection",
+                products_subtitle: "Fragrances premium à prix imbattables",
+                how_to_buy_title: "Comment Acheter",
+                how_to_buy_subtitle: "Étapes simples pour obtenir vos parfums de luxe",
+                step1_title: "Parcourir la Collection",
+                step1_desc: "Explorez notre sélection exclusive de parfums de luxe",
+                step2_title: "Ajouter au Panier",
+                step2_desc: "Sélectionnez vos favoris et ajoutez-les au panier",
+                step3_title: "Choisir le Paiement",
+                step3_desc: "Payez avec des méthodes standard ou cryptomonnaie",
+                step4_title: "Profiter de la Livraison",
+                step4_desc: "Recevez vos parfums avec livraison gratuite",
+                crypto_title: "Paiement Crypto",
+                crypto_subtitle: "Nous acceptons les principales cryptomonnaies pour votre commodité",
+                crypto_step1_title: "Sélectionner Crypto",
+                crypto_step1_desc: "Choisissez votre portefeuille de cryptomonnaie préféré",
+                crypto_step2_title: "Connecter le Portefeuille",
+                crypto_step2_desc: "Connectez en toute sécurité votre portefeuille crypto",
+                crypto_step3_title: "Confirmer le Paiement",
+                crypto_step3_desc: "Complétez la transaction dans votre portefeuille",
+                footer_about: "À Propos de Nous",
+                footer_about_text: "Parfums de luxe premium à prix abordables. Nous apportons l'élégance européenne à votre porte.",
+                footer_links: "Liens Rapides",
+                footer_privacy: "Politique de Confidentialité",
+                footer_terms: "Conditions d'Utilisation",
+                footer_returns: "Politique de Retour",
+                footer_shipping: "Info Livraison",
+                footer_contact: "Contact",
+                footer_rights: "Tous droits réservés.",
+                cart_title: "Panier",
+                cart_empty: "Votre panier est vide",
+                cart_total: "Total:",
+                checkout_btn: "Procéder au Paiement",
+                checkout_title: "Paiement",
+                form_firstname: "Prénom",
+                form_lastname: "Nom",
+                form_email: "Email",
+                form_address: "Adresse de Livraison",
+                form_payment: "Méthode de Paiement",
+                payment_standard: "Paiement Standard",
+                payment_crypto: "Cryptomonnaie",
+                place_order: "Passer la Commande",
+                details: "Détails",
+                add_to_cart: "Ajouter au Panier",
+                description: "Description",
+                volume: "Volume",
+                shipping_info: "Informations de Livraison",
+                shipping_text: "Livraison gratuite sur toutes les commandes. Livraison sous 5-7 jours ouvrables.",
+                payment_info: "Informations de Paiement",
+                payment_text: "Nous acceptons les cartes de crédit, PayPal et toutes les principales cryptomonnaies.",
+                quantity: "Quantité"
+            }
+        };
+
+        // Product Data
         const products = [
             {
                 id: 1,
-                name: "L'eau de Nuit",
-                brand: "LUXE PARIS",
-                price: 60,
-                original: 120,
-                image: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=400&h=400&fit=crop",
-                description: "A sophisticated blend of amber, vanilla, and sandalwood. Perfect for evening wear."
+                name: {
+                    en: "Élixir de Nuit",
+                    de: "Nacht Elixier",
+                    es: "Elixir de Noche",
+                    fr: "Élixir de Nuit"
+                },
+                brand: "MAISON D'OR",
+                description: {
+                    en: "A captivating evening fragrance with notes of amber, vanilla, and sandalwood. Perfect for special occasions and romantic evenings.",
+                    de: "Ein fesselnder Abendduft mit Noten von Amber, Vanille und Sandelholz. Perfekt für besondere Anlässe und romantische Abende.",
+                    es: "Una fragancia nocturna cautivadora con notas de ámbar, vainilla y sándalo. Perfecta para ocasiones especiales y veladas románticas.",
+                    fr: "Un parfum de soirée captivant avec des notes d'ambre, de vanille et de bois de santal. Parfait pour les occasions spéciales et les soirées romantiques."
+                },
+                originalPrice: 120,
+                discountedPrice: 60,
+                volumes: ["30ml", "50ml", "100ml"],
+                icon: "🌙"
             },
             {
                 id: 2,
-                name: "Golden Bloom",
-                brand: "LUXE PARIS",
-                price: 60,
-                original: 120,
-                image: "https://images.unsplash.com/photo-1588405748880-12d1d2a59d75?w=400&h=400&fit=crop",
-                description: "Fresh floral notes with hints of jasmine and rose. Elegant and timeless."
+                name: {
+                    en: "Golden Bloom",
+                    de: "Goldene Blüte",
+                    es: "Floración Dorada",
+                    fr: "Fleur d'Or"
+                },
+                brand: "ATELIER LUXE",
+                description: {
+                    en: "Fresh floral composition with jasmine, rose, and citrus notes. A timeless daytime fragrance for the modern woman.",
+                    de: "Frische Blütenkomposition mit Jasmin, Rose und Zitrusnoten. Ein zeitloser Tagesduft für die moderne Frau.",
+                    es: "Composición floral fresca con notas de jazmín, rosa y cítricos. Una fragancia diurna atemporal para la mujer moderna.",
+                    fr: "Composition florale fraîche avec des notes de jasmin, de rose et d'agrumes. Un parfum de jour intemporel pour la femme moderne."
+                },
+                originalPrice: 140,
+                discountedPrice: 70,
+                volumes: ["50ml", "100ml"],
+                icon: "🌸"
             },
             {
                 id: 3,
-                name: "Gyanic Bloom",
-                brand: "LUXE PARIS",
-                price: 60,
-                original: 120,
-                image: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400&h=400&fit=crop",
-                description: "Vibrant citrus notes with bergamot and neroli. Energizing and uplifting."
+                name: {
+                    en: "Mystic Forest",
+                    de: "Mystischer Wald",
+                    es: "Bosque Místico",
+                    fr: "Forêt Mystique"
+                },
+                brand: "NOIR ESSENCE",
+                description: {
+                    en: "Deep woody fragrance with cedar, pine, and leather notes. A bold statement for the confident individual.",
+                    de: "Tiefer holziger Duft mit Zeder, Kiefer und Ledernoten. Ein kühnes Statement für selbstbewusste Personen.",
+                    es: "Fragancia amaderada profunda con notas de cedro, pino y cuero. Una declaración audaz para la persona segura.",
+                    fr: "Parfum boisé profond avec des notes de cèdre, de pin et de cuir. Une déclaration audacieuse pour la personne confiante."
+                },
+                originalPrice: 160,
+                discountedPrice: 80,
+                volumes: ["50ml", "100ml"],
+                icon: "🌲"
             },
             {
                 id: 4,
-                name: "Mystic Forest",
-                brand: "LUXE PARIS",
-                price: 60,
-                original: 120,
-                image: "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=400&h=400&fit=crop",
-                description: "Woody and earthy with hints of cedar and moss. Bold and mysterious."
+                name: {
+                    en: "Ocean Breeze",
+                    de: "Meeresbrise",
+                    es: "Brisa del Océano",
+                    fr: "Brise Océanique"
+                },
+                brand: "AZURE NOTES",
+                description: {
+                    en: "Light aquatic fragrance with marine notes, bergamot, and white musk. Refreshing and invigorating for everyday wear.",
+                    de: "Leichter aquatischer Duft mit Meeres noten, Bergamotte und weißem Moschus. Erfrischend und belebend für den täglichen Gebrauch.",
+                    es: "Fragancia acuática ligera con notas marinas, bergamota y almizcle blanco. Refrescante y vigorizante para uso diario.",
+                    fr: "Parfum aquatique léger avec des notes marines, de bergamote et de musc blanc. Rafraîchissant et vivifiant pour un port quotidien."
+                },
+                originalPrice: 100,
+                discountedPrice: 50,
+                volumes: ["30ml", "50ml", "100ml"],
+                icon: "🌊"
             }
         ];
 
+        // State
+        let currentLang = 'en';
         let cart = [];
-        let currentProduct = null;
+        let selectedPaymentMethod = null;
+        let selectedWallet = null;
 
-        function renderProducts() {
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProducts();
+            setupLanguageSwitcher();
+            updateTranslations();
+        });
+
+        // Language Switcher
+        function setupLanguageSwitcher() {
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentLang = this.dataset.lang;
+                    updateTranslations();
+                    loadProducts();
+                });
+            });
+        }
+
+        function updateTranslations() {
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.dataset.translate;
+                if (translations[currentLang][key]) {
+                    if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                        element.placeholder = translations[currentLang][key];
+                    } else {
+                        element.innerHTML = translations[currentLang][key];
+                    }
+                }
+            });
+        }
+
+        // Load Products
+        function loadProducts() {
             const grid = document.getElementById('productsGrid');
-            grid.innerHTML = products.map(p => `
+            grid.innerHTML = products.map(product => `
                 <div class="product-card">
-                    <div class="product-badge">
-                        <div class="percent">50%</div>
-                        <div class="off">OFF</div>
-                    </div>
-                    <img src="${p.image}" alt="${p.name}" class="product-image">
+                    <div class="product-badge">-50% ${translations[currentLang].discount_badge.split(' ')[1] || 'OFF'}</div>
+                    <div class="product-image">${product.icon}</div>
                     <div class="product-info">
-                        <h3 class="product-name">${p.name}</h3>
-                        <p class="product-subtitle">------€${p.original}.00------</p>
-                        <div class="product-price">€${p.price}.00</div>
-                        <div class="product-actions">
-                            <button class="btn-details" onclick="showDetails(${p.id})">Details</button>
-                            <button class="btn-add" onclick="addToCart(${p.id})">Add to Cart</button>
+                        <div class="product-brand">${product.brand}</div>
+                        <div class="product-name">${product.name[currentLang]}</div>
+                        <div class="price-container">
+                            <span class="current-price">€${product.discountedPrice.toFixed(2)}</span>
+                            <span class="original-price">€${product.originalPrice.toFixed(2)}</span>
+                        </div>
+                        <div class="product-buttons">
+                            <button class="btn btn-details" onclick="openProductModal(${product.id})">${translations[currentLang].details || 'Details'}</button>
+                            <button class="btn btn-cart" onclick="addToCart(${product.id})">${translations[currentLang].add_to_cart || 'Add to Cart'}</button>
                         </div>
                     </div>
                 </div>
             `).join('');
         }
 
-        function showDetails(id) {
-            currentProduct = products.find(p => p.id === id);
-            document.getElementById('modalImage').src = currentProduct.image;
-            document.getElementById('modalName').textContent = currentProduct.name;
-            document.getElementById('modalBrand').textContent = currentProduct.brand;
-            document.getElementById('modalDescription').textContent = currentProduct.description;
-            document.getElementById('modalPrice').textContent = `€${currentProduct.price}.00`;
-            document.getElementById('modalOriginal').textContent = `€${currentProduct.original}.00`;
-            document.getElementById('productModal').classList.add('active');
+        // Product Modal
+        function openProductModal(productId) {
+            const product = products.find(p => p.id === productId);
+            const modal = document.getElementById('productModal');
+            const modalBody = document.getElementById('modalBody');
+            
+            modalBody.innerHTML = `
+                <div class="modal-image">${product.icon}</div>
+                <div class="modal-details">
+                    <div class="product-brand">${product.brand}</div>
+                    <h2>${product.name[currentLang]}</h2>
+                    <div class="price-container">
+                        <span class="current-price">€${product.discountedPrice.toFixed(2)}</span>
+                        <span class="original-price">€${product.originalPrice.toFixed(2)}</span>
+                    </div>
+                    <p class="product-description">${product.description[currentLang]}</p>
+                    <div class="volume-selector">
+                        <label>${translations[currentLang].volume || 'Volume'}</label>
+                        <div class="volume-options">
+                            ${product.volumes.map(v => `<button class="volume-option" onclick="selectVolume(this)">${v}</button>`).join('')}
+                        </div>
+                    </div>
+                    <button class="btn btn-cart" style="width: 100%;" onclick="addToCart(${product.id})">${translations[currentLang].add_to_cart || 'Add to Cart'}</button>
+                    <div class="info-section">
+                        <h3>${translations[currentLang].shipping_info || 'Shipping Information'}</h3>
+                        <p>${translations[currentLang].shipping_text || 'Free shipping on all orders. Delivery within 5-7 business days.'}</p>
+                    </div>
+                    <div class="info-section">
+                        <h3>${translations[currentLang].payment_info || 'Payment Information'}</h3>
+                        <p>${translations[currentLang].payment_text || 'We accept credit cards, PayPal, and all major cryptocurrencies.'}</p>
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.add('active');
         }
 
         function closeModal() {
             document.getElementById('productModal').classList.remove('active');
         }
 
-        function addToCart(id) {
-            const product = products.find(p => p.id === id);
-            const existing = cart.find(item => item.id === id);
+        function selectVolume(btn) {
+            document.querySelectorAll('.volume-option').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        // Cart Functions
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existingItem = cart.find(item => item.id === productId);
             
-            if (existing) {
-                existing.quantity++;
+            if (existingItem) {
+                existingItem.quantity++;
             } else {
-                cart.push({...product, quantity: 1});
+                cart.push({
+                    id: product.id,
+                    name: product.name[currentLang],
+                    brand: product.brand,
+                    price: product.discountedPrice,
+                    quantity: 1,
+                    icon: product.icon
+                });
             }
             
             updateCart();
-        }
-
-        function addToCartFromModal() {
-            if (currentProduct) {
-                addToCart(currentProduct.id);
-                closeModal();
-            }
+            showNotification(translations[currentLang].add_to_cart || 'Added to cart!');
         }
 
         function updateCart() {
-            const cartItems = document.getElementById('cartItems');
             const cartCount = document.getElementById('cartCount');
+            const cartItems = document.getElementById('cartItems');
+            const cartFooter = document.getElementById('cartFooter');
             const cartTotal = document.getElementById('cartTotal');
-
-            cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
-
+            
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = totalItems;
+            
             if (cart.length === 0) {
-                cartItems.innerHTML = '<p style="text-align: center; padding: 40px; color: #999;">Your cart is empty</p>';
-                cartTotal.textContent = '€0.00';
-                return;
-            }
-
-            cartItems.innerHTML = cart.map(item => `
-                <div class="cart-item">
-                    <img src="${item.image}" class="cart-item-image">
-                    <div class="cart-item-info">
-                        <h4>${item.name}</h4>
-                        <p style="color: #27ae60; font-weight: bold;">€${item.price}.00 × ${item.quantity}</p>
-                        <button onclick="removeFromCart(${item.id})" style="background: #e74c3c; color: white; border: none; padding: 5px 15px; cursor: pointer; margin-top: 10px; border-radius: 4px;">Remove</button>
+                cartItems.innerHTML = `
+                    <div class="empty-cart">
+                        <i class="fas fa-shopping-bag"></i>
+                        <p>${translations[currentLang].cart_empty || 'Your cart is empty'}</p>
                     </div>
-                </div>
-            `).join('');
-
-            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            cartTotal.textContent = `€${total.toFixed(2)}`;
+                `;
+                cartFooter.style.display = 'none';
+            } else {
+                cartItems.innerHTML = cart.map(item => `
+                    <div class="cart-item">
+                        <div class="cart-item-image">${item.icon}</div>
+                        <div class="cart-item-details">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-price">€${item.price.toFixed(2)}</div>
+                            <div class="quantity-controls">
+                                <button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
+                                <span>${item.quantity}</span>
+                                <button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
+                            </div>
+                        </div>
+                        <i class="fas fa-trash remove-btn" onclick="removeFromCart(${item.id})"></i>
+                    </div>
+                `).join('');
+                
+                const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                cartTotal.textContent = `€${total.toFixed(2)}`;
+                cartFooter.style.display = 'block';
+            }
         }
 
-        function removeFromCart(id) {
-            cart = cart.filter(item => item.id !== id);
+        function updateQuantity(productId, change) {
+            const item = cart.find(i => i.id === productId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    removeFromCart(productId);
+                } else {
+                    updateCart();
+                }
+            }
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
             updateCart();
         }
 
@@ -857,30 +1686,141 @@
             document.getElementById('cartSidebar').classList.toggle('active');
         }
 
-        function checkout() {
-            if (cart.length === 0) {
-                alert('Your cart is empty!');
-                return;
-            }
-            
-            const orderNumber = 'ORD-' + Date.now();
-            alert(`Order placed successfully!\nOrder Number: ${orderNumber}\n\nThank you for your purchase!`);
-            
-            // Send Telegram notification (simulated)
-            console.log('Sending Telegram notification for order:', orderNumber);
-            
-            cart = [];
-            updateCart();
+        // Checkout
+        function openCheckout() {
             toggleCart();
+            document.getElementById('checkoutModal').classList.add('active');
         }
 
-        function changeLang(lang) {
-            console.log('Language changed to:', lang);
-            // In production, this would reload content in the selected language
+        function closeCheckout() {
+            document.getElementById('checkoutModal').classList.remove('active');
         }
 
-        // Initialize
-        renderProducts();
+        function selectPayment(method) {
+            selectedPaymentMethod = method;
+            document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('active'));
+            event.target.closest('.payment-option').classList.add('active');
+            
+            if (method === 'crypto') {
+                document.getElementById('cryptoWallets').classList.add('active');
+            } else {
+                document.getElementById('cryptoWallets').classList.remove('active');
+            }
+        }
+
+        function selectWallet(wallet) {
+            selectedWallet = wallet;
+            showNotification(`Connecting to ${wallet}...`);
+            
+            // Simulate wallet connection
+            setTimeout(() => {
+                showNotification(`${wallet} connected successfully!`);
+            }, 1500);
+        }
+
+        // Form Submission
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkoutForm = document.getElementById('checkoutForm');
+            if (checkoutForm) {
+                checkoutForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const orderData = {
+                        firstName: document.getElementById('firstName').value,
+                        lastName: document.getElementById('lastName').value,
+                        email: document.getElementById('email').value,
+                        address: document.getElementById('address').value,
+                        paymentMethod: selectedPaymentMethod,
+                        wallet: selectedWallet,
+                        cart: cart,
+                        total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    // Simulate order processing
+                    showNotification('Processing order...');
+                    
+                    setTimeout(() => {
+                        showNotification('Order placed successfully! Check your email for confirmation.');
+                        
+                        // Send to Telegram (would need backend integration)
+                        sendTelegramNotification(orderData);
+                        
+                        // Reset cart and close modal
+                        cart = [];
+                        updateCart();
+                        closeCheckout();
+                        
+                        // Reset form
+                        checkoutForm.reset();
+                        selectedPaymentMethod = null;
+                        selectedWallet = null;
+                    }, 2000);
+                });
+            }
+        });
+
+        function sendTelegramNotification(orderData) {
+            // This would require a backend endpoint
+            console.log('Telegram Notification:', {
+                message: `New order received! Total: €${orderData.total.toFixed(2)}`,
+                items: orderData.cart.length,
+                paymentMethod: orderData.paymentMethod
+            });
+        }
+
+        // Notification System
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: var(--primary-gold);
+                color: var(--dark-bg);
+                padding: 20px 30px;
+                border-radius: 10px;
+                font-family: 'Montserrat', sans-serif;
+                font-weight: 600;
+                z-index: 10000;
+                animation: slideIn 0.3s ease-out;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Add slide animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(400px); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(400px); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const productModal = document.getElementById('productModal');
+            const checkoutModal = document.getElementById('checkoutModal');
+            
+            if (event.target === productModal) {
+                closeModal();
+            }
+            if (event.target === checkoutModal) {
+                closeCheckout();
+            }
+        }
     </script>
 </body>
 </html>
